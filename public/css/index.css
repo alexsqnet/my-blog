@@ -2723,6 +2723,9 @@ kbd {
     width: 100%;
   }
 }
+body {
+  font-family: sans-serif, Arial;
+}
 .header-nav-menu-item__link:hover {
   background: none;
   color: #49b1f5;
