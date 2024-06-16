@@ -36,7 +36,7 @@ public class CalculatorTests
     public void Adding_two_numbers()
     {
         int value1 = 1;
-        int value2 = 2;
+        int value2 = 3;
         int expected = value1 + value2;   //   <--- The leakage
         
         int actual = Calculator.Add(value1, value2);
@@ -59,8 +59,8 @@ Example 3: A correct way ✔️
 public class CalculatorTests
 {
     [Theory]
-    [InlineData(1, 5, 6)]
-    [InlineData(10, 50, 60)]
+    [InlineData(1, 3, 4)]
+    [InlineData(11, 33, 44)]
     [InlineData(100, 500, 600)]
     public void Adding_two_numbers(int value1, int value2, int expected)
     {
@@ -69,3 +69,5 @@ public class CalculatorTests
     }
 }
 ```
+
+This example I found in Vladimir Khorikov's book - 'Unit Testing Principles, Practices, and Patterns'. It is indeed highly recommended for anyone interested in improving their understanding and practice of unit testing. It provides valuable insights, practical advice, and best practices for writing effective unit tests.
