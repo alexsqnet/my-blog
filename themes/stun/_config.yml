@@ -54,6 +54,7 @@ menu:
   archives: /my-blog/archives || fas fa-folder-open
   categories: /my-blog/categories || fas fa-layer-group
   tags: /my-blog/tags || fas fa-tags
+  about: /my-blog/about || fas fa-address-card
   # You can add a secondary menu like follow.
   # xxx1: javascript:; || fa(s|r|l|d|b) fa-xxx
 
@@ -75,12 +76,12 @@ menu_settings:
 # ---------------------------------------------------------------
 
 favicon:
-  small: /images/icons/favicon-16x16.png
-  medium: /images/icons/favicon-32x32.png
+  small: /uploads/favicon_io/favicon-16x16.png
+  medium: /uploads/favicon_io/favicon-32x32.png
   # ! --------------------------------------------------
   # ! If you don't know the following, please ignore it.
   # ! --------------------------------------------------
-  # apple_touch_icon: /images/icons/apple-touch-icon.png
+  apple_touch_icon: /uploads/favicon_io/apple-touch-icon.png
   # safari_pinned_tab: /images/icons/stun-logo.svg
   # msapplication: /images/icons/favicon-144x144.png
 
@@ -100,7 +101,7 @@ night_mode:
     # Color of button (Please use '' to wrap the value).
     color: '#fafafa'
     # Background color of button (Please use '' to wrap the value).
-    bg_color: '#8c8a8a'
+    bg_color: '#171558'
   # The icon that stand for day and night.
   icon:
     dark: 🌜
@@ -312,7 +313,7 @@ author:
 # If you can`t find a suitable icon, you can choose to display text by adding the `origin:` prefix.
 # e.g. `origin:sf`, so `sf` will be displayed.
 social:
-  github: https://github.com/alexsqnet || fab fa-github
+  # github: https://github.com/alexsqnet || fab fa-github
   facebook: https://www.facebook.com/alexsqnet || fab fa-facebook
   linkedin: https://www.linkedin.com/in/alexandr-sipco-48265b163 || fab fa-linkedin
   # twitter: https://twitter.com/ || fab fa-twitter
