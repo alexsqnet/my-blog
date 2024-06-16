@@ -18,7 +18,7 @@ I am currently working as a .Net Full Stack developer.
  - Entity Framework Core
 
 <h3 style="text-align: center;">~ Welcome to my blog ~</h3>
-<img src="/my-blog/uploads/about_me.jpg" alt="Description" width="500">
+<img src="/uploads/about_me.jpg" alt="Description" width="500">
 
 
  <br>

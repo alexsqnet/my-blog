@@ -143,7 +143,7 @@ header:
     # In theme directory (source/images): /images/avatar.png
     # In site directory (source/uploads): /uploads/avatar.png
     # You can also use a link of image.
-    url: /my-blog/uploads/header_bg.jpg
+    url: /uploads/header_bg.jpg
   # Banner area.
   banner:
     # Effective for all pages.
@@ -295,7 +295,7 @@ author:
     # In theme directory (source/images): /images/avatar.png
     # In site directory (source/uploads): /uploads/avatar.png
     # You can also use a link of image.
-    url: /my-blog/uploads/me.png
+    url: /uploads/me.png
     # If true, the avatar would be displayed in a circle.
     rounded: false
     # Opacity of avatar (value: 0 ~ 1)
