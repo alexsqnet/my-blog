@@ -6,8 +6,11 @@ tags:
     - anti-pattern
 category:
     - unit testing
----
 
+thumbnail: uploads/leaking-domain-knowledge-antipattern/cover.png
+banner: uploads/leaking-domain-knowledge-antipattern/cover.png
+---
+![Alt Text](uploads/leaking-domain-knowledge-antipattern/cover.png)
 Leaking domain knowledge to tests is an anti-pattern in software development and testing. It occurs when the test code contains information about the implementation details of the system under test (SUT) rather than focusing on its behavior and expected outcomes. This can lead to a number of issues that undermine the effectiveness and maintainability of the tests.
 
 <!--more-->
@@ -71,3 +74,15 @@ public class CalculatorTests
 ```
 
 This example I found in Vladimir Khorikov's book - 'Unit Testing Principles, Practices, and Patterns'. It is indeed highly recommended for anyone interested in improving their understanding and practice of unit testing. It provides valuable insights, practical advice, and best practices for writing effective unit tests.
+
+Key Characteristics of the Antipattern
+
+1. ***Implementation Details in Tests***: Tests include specifics about how the code is implemented rather than what it should do. For example, knowing the exact data structures or internal workings of the functions being tested.
+
+2. ***Tight Coupling***: Tests become tightly coupled to the implementation. If the implementation changes, even if the external behavior remains the same, the tests break and need to be updated.
+
+3. ***Reduced Readability***: Tests become harder to understand because they include complex implementation details that are not necessary for understanding the expected behavior.
+
+4. ***Fragility***: Tests become fragile and more prone to failure due to minor changes in the codebase that do not affect the overall functionality but alter the internal implementation.
+
+5. ***Limited Refactoring***: Developers are discouraged from refactoring code, as such changes would require corresponding changes in the test code, making refactoring a more daunting task.
