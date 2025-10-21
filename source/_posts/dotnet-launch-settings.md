@@ -2,7 +2,7 @@
 title: .NET – Launch Settings (Basics)
 date: 2024-10-20 19:10:45
 tags: [.NET, launchSettings, Development]
-category: [".NET"]
+category: [".net"]
 
 thumbnail: uploads/dotnet-launch-settings/cover.png
 banner: uploads/dotnet-launch-settings/cover.png
@@ -17,7 +17,6 @@ banner: uploads/dotnet-launch-settings/cover.png
 
 <!--more-->
 
----
 
 ## Key Fields
 
@@ -28,7 +27,6 @@ banner: uploads/dotnet-launch-settings/cover.png
 - **`launchBrowser`** – automatically opens the browser at startup (true/false).  
 - **`dotnetRunMessages`** – displays active URL messages in the console.
 
----
 
 ## Your Profiles
 
@@ -64,7 +62,6 @@ Example minimal file:
 - If you have `app.UseHttpsRedirection()` in `Program.cs`, the `http` profile will automatically redirect to HTTPS.  
   👉 For normal development, use the **`https` profile**.
 
----
 
 ## Link to the Code
 
@@ -77,7 +74,6 @@ if (app.Environment.IsDevelopment())
 }
 ```
 
----
 
 ## How to Run with a Profile
 
@@ -89,7 +85,6 @@ dotnet run --launch-profile https
 Visual Studio / Rider / VS Code:  
 select the desired profile from the run dropdown.
 
----
 
 ## Practical Tips
 
@@ -106,7 +101,6 @@ select the desired profile from the run dropdown.
   }
   ```
 
----
 
 ## Summary
 
@@ -116,7 +110,6 @@ select the desired profile from the run dropdown.
 - **What it doesn’t do:** does not affect build/publish and is not used in production.  
   For production → use `appsettings*.json`, environment variables, and host configuration.
 
----
 
 **In short:**  
 `launchSettings.json` is a local development tool that defines *how* your .NET app runs on your machine — not *where* or *how* it will run in production.
