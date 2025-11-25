@@ -295,7 +295,7 @@ author:
     # In theme directory (source/images): /images/avatar.png
     # In site directory (source/uploads): /uploads/avatar.png
     # You can also use a link of image.
-    url: /uploads/me.png
+    url: /uploads/me.jpg
     # If true, the avatar would be displayed in a circle.
     rounded: false
     # Opacity of avatar (value: 0 ~ 1)
