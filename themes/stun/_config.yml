@@ -110,9 +110,9 @@ night_mode:
 # The layout for sidebar and content of site.
 layout:
   # The width of the content area in website.
-  content: 1200px #768px
+  content: 1100px #768px
   # The width of the sidebar in website.
-  sidebar: 300px
+  sidebar: 350px
   # The width between the content and the sidebar.
   content_sidebar_gap: 30px
   # The padding property of the main tag.
