@@ -22,6 +22,9 @@ This article will help you build a **simple mental model** so you always know *w
 
 <!--more-->
 
+<br>
+
+
 ## The Big Picture
 
 `Program.cs` does **two main things**:
@@ -31,6 +34,7 @@ This article will help you build a **simple mental model** so you always know *w
 
 If you understand these two ideas, everything else becomes much easier.
 
+<br>
 
 ## Registering Services (Dependency Injection)
 
@@ -65,6 +69,7 @@ Ask yourself:
 
 If the answer is **yes**, it probably belongs in `builder.Services`.
 
+<br>
 
 ## Configuring the Middleware Pipeline
 
@@ -104,7 +109,7 @@ For example:
 - `UseAuthentication()` must come **before**
 - `UseAuthorization()`
 
-
+<br>
 
 ## The Most Common `Program.cs` Template (90% of APIs)
 
@@ -139,6 +144,7 @@ app.Run();
 
 If you understand this template, you already understand most ASP.NET Core applications.
 
+<br>
 
 ## Where Do Common Features Go?
 
@@ -152,7 +158,7 @@ If you understand this template, you already understand most ASP.NET Core applic
 | EF Core | `AddDbContext()` | — |
 | Static files | — | `UseStaticFiles()` |
 
-
+<br>
 
 ## What You SHOULD Memorize
 
@@ -162,6 +168,7 @@ If you understand this template, you already understand most ASP.NET Core applic
 - Authentication before Authorization
 - `Environment.IsDevelopment()`
 
+<br>
 
 ## What You Should NOT Memorize
 
@@ -172,6 +179,7 @@ If you understand this template, you already understand most ASP.NET Core applic
 
 These are **reference knowledge**, not memory knowledge.
 
+<br>
 
 
 ## Final Advice
@@ -191,6 +199,3 @@ Once the mental model is clear:
 
 That’s how real-world ASP.NET Core development works.
 
-
-
-Happy coding 🚀

@@ -845,10 +845,10 @@ shortcuts:
 tag_cloud:
   # (Please use '' to wrap the value)
   start_color: '#a4d8fa'
-  end_color: '#49b1f5'
+  end_color: '#a4d8fa'
   # Size for tag.
   min_size: 16
-  max_size: 26
+  max_size: 16
   # Maximum number of tags displayed. Change it if you have more than 200 tags.
   max_amount: 200
 

@@ -27,6 +27,8 @@ The process consists of three steps:
 
 ![Alt Text](uploads/how-to-clean-audio-in-video-files/schema.png)
 
+<br>
+
 ## Requirements
 
 - [**FFmpeg**](https://ffmpeg.org/) installed (we will use FFmpeg, a powerful command-line tool that allows us to quickly extract and replace audio tracks inside video files)
@@ -35,6 +37,7 @@ The process consists of three steps:
   - DAW (like Reaper, Adobe Audition, Ableton Live, etc)
   - iZotope RX
 
+<br>
 
 ## Inspect Audio Tracks in a Video
 
@@ -59,6 +62,7 @@ These represent:
 
 Some videos contain multiple tracks: microphone, system audio, backup tracks, etc.
 
+<br>
 
 ## Identify Which Track Contains the Microphone
 
@@ -95,6 +99,8 @@ ffmpeg -i input.mp4 -map 0:a:2 -c copy track2.m4a
 
 Listen and identify which one is the microphone.
 
+<br>
+
 ## Extract the Audio Track You Want to Edit
 
 Example: microphone is `0:a:1`:
@@ -103,6 +109,8 @@ Example: microphone is `0:a:1`:
 ffmpeg -i input.mp4 -map 0:a:1 -acodec pcm_s16le audio_raw.wav
 ```
 Using WAV ensures no compression → best for editing.
+
+<br>
 
 ## Edit the Audio
 
@@ -119,6 +127,8 @@ Export as:
 ```
 audio_clean.wav
 ```
+
+<br>
 
 ## Reinsert Cleaned Audio (Replace Audio)
 
@@ -138,6 +148,7 @@ Meaning:
 
 This replaces the original audio if the video had only one track.
 
+<br>
 
 ## Replace Only ONE Track and Delete ALL Original Audio
 If your video has multiple audio streams (e.g., microphone + system audio + backup), and you want ONLY your cleaned track to remain:
@@ -164,6 +175,8 @@ This works even if the original video had:
 
 Everything is removed except the cleaned one.
 
+<br>
+
 ## Keep Some Tracks, Remove Others
 
 Example: keep only microphone (`0:a:1`), remove others:
@@ -172,6 +185,7 @@ Example: keep only microphone (`0:a:1`), remove others:
 ffmpeg -i input.mp4 -map 0:v -map 0:a:1 -c:v copy -c:a aac output_filtered.mp4
 ```
 
+<br>
 
 ## Replace Only the Microphone Track but Keep Others
 
@@ -186,6 +200,8 @@ Audio tracks become:
 - System audio (original)
 - Microphone audio (cleaned)
 
+<br>
+
 ## Summary Table
 
 | Task | Command |
@@ -195,6 +211,8 @@ Audio tracks become:
 | Replace all audio | `-map 0:v -map 1:a` |
 | Keep selected tracks | `-map 0:a:X` |
 
+
+<br>
 
 ## Final Notes
 

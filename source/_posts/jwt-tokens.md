@@ -24,6 +24,8 @@ This article explains:
 - how refresh tokens work
 - how client-side and server-side authorization is handled
 
+<br>
+
 
 ## Cookies vs JWT – Two Authentication Models
 
@@ -47,6 +49,9 @@ This model is ideal for traditional web pages.
 
 This model is ideal for modern, API-first applications.
 
+<br>
+
+
 ## What is JWT?
 
 A **JWT (JSON Web Token)** is a compact, URL-safe token used to represent authenticated user identity.
@@ -58,6 +63,8 @@ HEADER.PAYLOAD.SIGNATURE
 ```
 
 Each part is Base64URL-encoded and separated by a dot.
+
+<br>
 
 ## JWT Header
 
@@ -77,6 +84,8 @@ Example:
 - `typ`: token type (JWT)
 
 The header does not contain user data.
+
+<br>
 
 ## JWT Payload (Claims)
 
@@ -111,6 +120,7 @@ Example payload:
 JWT payload is **not encrypted**, only **signed**.
 Anyone can decode it — therefore **never store sensitive data**.
 
+<br>
 
 ## JWT Signature
 
@@ -127,6 +137,8 @@ using a **secret signing key**.
 Only the backend knows this key.
 
 If the payload is modified (for example, changing a role to `Admin`), the signature becomes invalid and the token is rejected.
+
+<br>
 
 ## Authentication Flow with JWT.
 
@@ -153,6 +165,7 @@ POST /auth/login
 - Access token is stored in memory
 - Refresh token is stored securely
 
+<br>
 
 ## Sending Authenticated Requests
 
@@ -163,6 +176,8 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 An HTTP interceptor (Angular) usually attaches this header automatically.
 
+<br>
+
 ## What Happens on the Backend
 
 For each protected request:
@@ -172,6 +187,8 @@ For each protected request:
 4. Authorization policies decide access
 
 If validation fails → 401 Unauthorized
+
+<br>
 
 ## Authorization: Roles and Policies
 
@@ -196,6 +213,7 @@ The policy:
 
 This approach avoids putting dynamic data into JWT.
 
+<br>
 
 ## Refresh Tokens and Token Rotation
 
@@ -216,6 +234,7 @@ This process is called **refresh token rotation** and is a security best practic
 
 Refresh tokens are **never stored in plain text**, only as hashes.
 
+<br>
 
 ## Client-Side Authorization (UI Control)
 
@@ -236,6 +255,7 @@ The client:
 
 Even if UI hides something, the backend still enforces security.
 
+<br>
 
 ## What JWT Should Contain (Summary)
 
@@ -252,6 +272,7 @@ Even if UI hides something, the backend still enforces security.
 - dynamic permissions
 - personal sensitive data
 
+<br>
 
 ## Key Takeaway
 
@@ -260,6 +281,8 @@ Even if UI hides something, the backend still enforces security.
 **Policies and database checks answer “what you can do”**
 
 JWT authentication is stateless, scalable, and perfect for modern applications when implemented correctly with refresh tokens and server-side authorization.
+
+<br>
 
 ## Conclusion
 

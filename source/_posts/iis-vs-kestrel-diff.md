@@ -15,6 +15,8 @@ When you create an ASP.NET Core web app, it runs on a web server. You might have
 
 <!--more-->
 
+<br>
+
 ## Kestrel
 
 **Kestrel** is a fast, lightweight, and cross‑platform web server built into ASP.NET Core.  
@@ -37,6 +39,8 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 ```
 
+<br>
+
 ## IIS
 
 **IIS (Internet Information Services)** is a mature, feature‑rich web server built into Windows.  
@@ -53,6 +57,8 @@ When hosting ASP.NET Core on IIS:
 - **In‑process**: the app runs directly inside IIS (`w3wp.exe`) — fastest option.  
 - **Out‑of‑process**: IIS acts as a reverse proxy to Kestrel.
 
+<br>
+
 ## Which one should you use?
 
 | Scenario | Recommended Server |
@@ -63,6 +69,8 @@ When hosting ASP.NET Core on IIS:
 | Need Active Directory (Windows Auth) | IIS |
 | Cloud (Azure, AWS, etc.) with load balancer | Kestrel + reverse proxy |
 
+<br>
+
 ## Integration tip
 
 When running behind a proxy (like IIS or Nginx), remember to use the **Forwarded Headers Middleware** in your app:
@@ -72,6 +80,8 @@ app.UseForwardedHeaders();
 ```
 
 This ensures your app knows the correct client IPs and HTTPS status.
+
+<br>
 
 ## Summary
 

@@ -17,6 +17,8 @@ banner: uploads/dotnet-launch-settings/cover.png
 
 <!--more-->
 
+<br>
+
 
 ## Key Fields
 
@@ -27,6 +29,8 @@ banner: uploads/dotnet-launch-settings/cover.png
 - **`launchBrowser`** – automatically opens the browser at startup (true/false).  
 - **`dotnetRunMessages`** – displays active URL messages in the console.
 
+
+<br>
 
 ## Your Profiles
 
@@ -63,6 +67,8 @@ Example minimal file:
   👉 For normal development, use the **`https` profile**.
 
 
+<br>
+
 ## Link to the Code
 
 The variable `ASPNETCORE_ENVIRONMENT = Development` activates conditional blocks such as:
@@ -74,6 +80,7 @@ if (app.Environment.IsDevelopment())
 }
 ```
 
+<br>
 
 ## How to Run with a Profile
 
@@ -85,6 +92,7 @@ dotnet run --launch-profile https
 Visual Studio / Rider / VS Code:  
 select the desired profile from the run dropdown.
 
+<br>
 
 ## Practical Tips
 
@@ -101,6 +109,7 @@ select the desired profile from the run dropdown.
   }
   ```
 
+<br>
 
 ## Summary
 
