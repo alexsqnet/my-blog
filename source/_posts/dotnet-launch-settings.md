@@ -1,7 +1,7 @@
 ---
 title: .NET – Launch Settings (Basics)
 date: 2024-10-20 19:10:45
-tags: [.net, launchSettings, Development]
+tags: [.net, launchSettings, development]
 category: [".net"]
 
 thumbnail: uploads/dotnet-launch-settings/cover.png

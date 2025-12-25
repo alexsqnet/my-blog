@@ -1,0 +1,598 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/uploads/favicon_io/favicon-16x16.png?v=2.8.0" type="image/png" sizes="16x16"><link rel="icon" href="/uploads/favicon_io/favicon-32x32.png?v=2.8.0" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/uploads/favicon_io/apple-touch-icon.png?v=2.8.0" sizes="180x180"><meta name="description" content="Configuration is a core part of every ASP.NET Core application.Before comparing IOptions, IOptionsSnapshot, and IOptionsMonitor,let’s first understand how configuration classes are created and regist">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Configuration in ASP.NET Core applications">
+<meta property="og:url" content="https://alexsipco.net/2024/12/21/configuration-in-aspnet-core-applications/index.html">
+<meta property="og:site_name" content="Alexandr Sipco - Software Developer&#39;s blog">
+<meta property="og:description" content="Configuration is a core part of every ASP.NET Core application.Before comparing IOptions, IOptionsSnapshot, and IOptionsMonitor,let’s first understand how configuration classes are created and regist">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://alexsipco.net/uploads/configuration-in-aspnet-core-applications/cover.png">
+<meta property="article:published_time" content="2024-12-21T19:49:35.000Z">
+<meta property="article:modified_time" content="2025-12-25T20:25:58.094Z">
+<meta property="article:author" content="Alexandr Sipco">
+<meta property="article:tag" content="asp.net core">
+<meta property="article:tag" content=".net">
+<meta property="article:tag" content="configurations">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://alexsipco.net/uploads/configuration-in-aspnet-core-applications/cover.png"><title>Configuration in ASP.NET Core applications | Alexandr Sipco - Software Developer's blog</title><link ref="canonical" href="https://alexsipco.net/2024/12/21/configuration-in-aspnet-core-applications/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.8.0"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">Categories</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">Tags</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about"><span class="header-nav-menu-item__icon"><i class="fas fa-address-card"></i></span><span class="header-nav-menu-item__text">About</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">Search</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">A software developer's blog</div><div class="header-banner-info__subtitle">Programming is the art of telling another human being what one wants the computer to do.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Configuration in ASP.NET Core applications</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2024-12-21</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2025-12-25</span></span></div></header><div class="post-body"><p><img src="/uploads/configuration-in-aspnet-core-applications/cover.png" alt="Alt Text"></p>
+<p>Configuration is a core part of every ASP.NET Core application.<br>Before comparing <code>IOptions</code>, <code>IOptionsSnapshot</code>, and <code>IOptionsMonitor</code>,<br>let’s first understand <strong>how configuration classes are created and registered</strong>.</p>
+<blockquote>
+<p><code>IOptions</code> vs <code>IOptionsSnapshot</code> vs <code>IOptionsMonitor</code> in ASP.NET Core</p>
+</blockquote>
+<span id="more"></span>
+
+<br>
+
+
+        <h2 id="Creating-a-configuration-Options-class"   >
+          <a href="#Creating-a-configuration-Options-class" class="heading-link"><i class="fas fa-link"></i></a><a href="#Creating-a-configuration-Options-class" class="headerlink" title="Creating a configuration (Options) class"></a>Creating a configuration (Options) class</h2>
+      <p>In ASP.NET Core, it is a best practice to map configuration sections from<br><code>appsettings.json</code> to <strong>strongly typed classes</strong>.</p>
+
+        <h3 id="Example-appsettings-json"   >
+          <a href="#Example-appsettings-json" class="heading-link"><i class="fas fa-link"></i></a><a href="#Example-appsettings-json" class="headerlink" title="Example: appsettings.json"></a>Example: appsettings.json</h3>
+      <figure class="highlight json"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Jwt&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Issuer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;MyApi&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Audience&quot;</span><span class="punctuation">:</span> <span class="string">&quot;MyApiUsers&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Secret&quot;</span><span class="punctuation">:</span> <span class="string">&quot;super-secret-key&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Matching-options-class"   >
+          <a href="#Matching-options-class" class="heading-link"><i class="fas fa-link"></i></a><a href="#Matching-options-class" class="headerlink" title="Matching options class"></a>Matching options class</h3>
+      <p>The class structure should <strong>match the JSON structure exactly</strong>.</p>
+<figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JwtOptions</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Issuer &#123; <span class="keyword">get</span>; <span class="keyword">init</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Audience &#123; <span class="keyword">get</span>; <span class="keyword">init</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Secret &#123; <span class="keyword">get</span>; <span class="keyword">init</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>✔ Property names match JSON keys<br>✔ Nested objects become nested classes<br>✔ No logic — only configuration data  </p>
+<hr>
+<br>
+
+
+        <h2 id="Registering-the-options-in-Program-cs"   >
+          <a href="#Registering-the-options-in-Program-cs" class="heading-link"><i class="fas fa-link"></i></a><a href="#Registering-the-options-in-Program-cs" class="headerlink" title="Registering the options in Program.cs"></a>Registering the options in Program.cs</h2>
+      <p>You only need <strong>one line</strong> in <code>Program.cs</code>:</p>
+<figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">builder.Services.Configure&lt;JwtOptions&gt;(</span><br><span class="line">    builder.Configuration.GetSection(<span class="string">&quot;Jwt&quot;</span>));</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Important"   >
+          <a href="#Important" class="heading-link"><i class="fas fa-link"></i></a><a href="#Important" class="headerlink" title="Important"></a>Important</h3>
+      <ul>
+<li>This single line registers <strong>all three mechanisms</strong>:<ul>
+<li><code>IOptions&lt;JwtOptions&gt;</code></li>
+<li><code>IOptionsSnapshot&lt;JwtOptions&gt;</code></li>
+<li><code>IOptionsMonitor&lt;JwtOptions&gt;</code></li>
+</ul>
+</li>
+<li>You <strong>do not</strong> register them separately.</li>
+</ul>
+<blockquote>
+<p>Configuration is registered once —<br>the choice of options type is made at injection time.</p>
+</blockquote>
+<hr>
+<br>
+
+
+        <h2 id="The-Big-Picture"   >
+          <a href="#The-Big-Picture" class="heading-link"><i class="fas fa-link"></i></a><a href="#The-Big-Picture" class="headerlink" title="The Big Picture"></a>The Big Picture</h2>
+      <blockquote>
+<p><strong>All three options types read the same configuration</strong>,<br>but they differ in <strong>lifetime</strong>, <strong>when values update</strong>, and <strong>where they can be used</strong>.</p>
+</blockquote>
+<hr>
+<br>
+
+
+        <h2 id="IOptions-—-Static-configuration"   >
+          <a href="#IOptions-—-Static-configuration" class="heading-link"><i class="fas fa-link"></i></a><a href="#IOptions-—-Static-configuration" class="headerlink" title="IOptions — Static configuration"></a>IOptions<T> — Static configuration</h2>
+      
+        <h3 id="What-it-is"   >
+          <a href="#What-it-is" class="heading-link"><i class="fas fa-link"></i></a><a href="#What-it-is" class="headerlink" title="What it is"></a>What it is</h3>
+      <p><code>IOptions&lt;T&gt;</code> reads configuration <strong>once</strong>, when the application starts.</p>
+<figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TokenService</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> JwtOptions _options;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TokenService</span>(<span class="params">IOptions&lt;JwtOptions&gt; options</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _options = options.Value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Key-characteristics"   >
+          <a href="#Key-characteristics" class="heading-link"><i class="fas fa-link"></i></a><a href="#Key-characteristics" class="headerlink" title="Key characteristics"></a>Key characteristics</h3>
+      <ul>
+<li><strong>Singleton</strong></li>
+<li>Values do <strong>not change</strong> until application restart</li>
+<li>Very stable and predictable</li>
+</ul>
+
+        <h3 id="When-to-use-it"   >
+          <a href="#When-to-use-it" class="heading-link"><i class="fas fa-link"></i></a><a href="#When-to-use-it" class="headerlink" title="When to use it"></a>When to use it</h3>
+      <ul>
+<li>JWT settings  </li>
+<li>Connection strings  </li>
+<li>API keys  </li>
+<li>Infrastructure configuration</li>
+</ul>
+<hr>
+<br>
+
+
+        <h2 id="IOptionsSnapshot-—-Per-request-configuration"   >
+          <a href="#IOptionsSnapshot-—-Per-request-configuration" class="heading-link"><i class="fas fa-link"></i></a><a href="#IOptionsSnapshot-—-Per-request-configuration" class="headerlink" title="IOptionsSnapshot — Per request configuration"></a>IOptionsSnapshot<T> — Per request configuration</h2>
+      
+        <h3 id="What-it-is-1"   >
+          <a href="#What-it-is-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#What-it-is-1" class="headerlink" title="What it is"></a>What it is</h3>
+      <p><code>IOptionsSnapshot&lt;T&gt;</code> re-reads configuration <strong>once per HTTP request</strong>.</p>
+<figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AuthController</span> : <span class="title">ControllerBase</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> JwtOptions _options;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AuthController</span>(<span class="params">IOptionsSnapshot&lt;JwtOptions&gt; options</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _options = options.Value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Key-characteristics-1"   >
+          <a href="#Key-characteristics-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#Key-characteristics-1" class="headerlink" title="Key characteristics"></a>Key characteristics</h3>
+      <ul>
+<li><strong>Scoped (per request)</strong></li>
+<li>Values update <strong>on the next request</strong></li>
+<li>Configuration remains stable during one request</li>
+<li>Cannot be injected into Singleton services</li>
+</ul>
+
+        <h3 id="Important-detail"   >
+          <a href="#Important-detail" class="heading-link"><i class="fas fa-link"></i></a><a href="#Important-detail" class="headerlink" title="Important detail"></a>Important detail</h3>
+      <p>If configuration changes <strong>during a request</strong>,<br>that request will <strong>not</strong> see the new values.</p>
+<p>The next request will.</p>
+
+        <h3 id="When-to-use-it-1"   >
+          <a href="#When-to-use-it-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#When-to-use-it-1" class="headerlink" title="When to use it"></a>When to use it</h3>
+      <ul>
+<li>Web APIs  </li>
+<li>Feature flags  </li>
+<li>Tunable settings  </li>
+<li>Runtime configuration testing</li>
+</ul>
+<hr>
+<br>
+
+
+        <h2 id="IOptionsMonitor-—-Live-configuration"   >
+          <a href="#IOptionsMonitor-—-Live-configuration" class="heading-link"><i class="fas fa-link"></i></a><a href="#IOptionsMonitor-—-Live-configuration" class="headerlink" title="IOptionsMonitor — Live configuration"></a>IOptionsMonitor<T> — Live configuration</h2>
+      
+        <h3 id="What-it-is-2"   >
+          <a href="#What-it-is-2" class="heading-link"><i class="fas fa-link"></i></a><a href="#What-it-is-2" class="headerlink" title="What it is"></a>What it is</h3>
+      <p><code>IOptionsMonitor&lt;T&gt;</code> listens for configuration changes <strong>in real time</strong>.</p>
+<figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">BackgroundWorker</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BackgroundWorker</span>(<span class="params">IOptionsMonitor&lt;JwtOptions&gt; monitor</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        monitor.OnChange(newOptions =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// React immediately to configuration changes</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Key-characteristics-2"   >
+          <a href="#Key-characteristics-2" class="heading-link"><i class="fas fa-link"></i></a><a href="#Key-characteristics-2" class="headerlink" title="Key characteristics"></a>Key characteristics</h3>
+      <ul>
+<li><strong>Singleton</strong></li>
+<li>Values update immediately</li>
+<li>Supports <code>OnChange</code> event</li>
+<li>Can be injected into Singleton services</li>
+</ul>
+
+        <h3 id="When-to-use-it-2"   >
+          <a href="#When-to-use-it-2" class="heading-link"><i class="fas fa-link"></i></a><a href="#When-to-use-it-2" class="headerlink" title="When to use it"></a>When to use it</h3>
+      <ul>
+<li>Background services  </li>
+<li>Long-running workers  </li>
+<li>Cache refresh logic  </li>
+<li>Polling &#x2F; watcher services</li>
+</ul>
+<hr>
+<br>
+
+
+        <h2 id="Key-Difference-This-Matters"   >
+          <a href="#Key-Difference-This-Matters" class="heading-link"><i class="fas fa-link"></i></a><a href="#Key-Difference-This-Matters" class="headerlink" title="Key Difference (This Matters)"></a>Key Difference (This Matters)</h2>
+      
+        <h3 id="IOptionsSnapshot"   >
+          <a href="#IOptionsSnapshot" class="heading-link"><i class="fas fa-link"></i></a><a href="#IOptionsSnapshot" class="headerlink" title="IOptionsSnapshot"></a>IOptionsSnapshot</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Request A  -&gt; old values</span><br><span class="line">Config changes</span><br><span class="line">Request B  -&gt; new values</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="IOptionsMonitor"   >
+          <a href="#IOptionsMonitor" class="heading-link"><i class="fas fa-link"></i></a><a href="#IOptionsMonitor" class="headerlink" title="IOptionsMonitor"></a>IOptionsMonitor</h3>
+      <figure class="highlight plaintext"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Config changes</span><br><span class="line">OnChange fires immediately</span><br><span class="line">All consumers see new values</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+<br>
+
+
+        <h2 id="Comparison-Table"   >
+          <a href="#Comparison-Table" class="heading-link"><i class="fas fa-link"></i></a><a href="#Comparison-Table" class="headerlink" title="Comparison Table"></a>Comparison Table</h2>
+      <div class="table-container"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>IOptions</th>
+<th>IOptionsSnapshot</th>
+<th>IOptionsMonitor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lifetime</td>
+<td>Singleton</td>
+<td>Scoped</td>
+<td>Singleton</td>
+</tr>
+<tr>
+<td>Updates without restart</td>
+<td>❌</td>
+<td>✅ (next request)</td>
+<td>✅ (live)</td>
+</tr>
+<tr>
+<td>Has OnChange</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Works in Singleton</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Best for Web API</td>
+<td>⚠️</td>
+<td>⭐⭐⭐</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td>Best for Background Services</td>
+<td>❌</td>
+<td>❌</td>
+<td>⭐⭐⭐</td>
+</tr>
+</tbody></table></div>
+<hr>
+<br>
+
+
+        <h2 id="Why-are-there-three-options"   >
+          <a href="#Why-are-there-three-options" class="heading-link"><i class="fas fa-link"></i></a><a href="#Why-are-there-three-options" class="headerlink" title="Why are there three options?"></a>Why are there three options?</h2>
+      <p>ASP.NET Core supports both:</p>
+<ul>
+<li>request-based applications (Web APIs)</li>
+<li>long-running services (workers)</li>
+</ul>
+<p>Different lifetimes require different configuration strategies.</p>
+<hr>
+<br>
+
+
+        <h2 id="The-Golden-Rule"   >
+          <a href="#The-Golden-Rule" class="heading-link"><i class="fas fa-link"></i></a><a href="#The-Golden-Rule" class="headerlink" title="The Golden Rule"></a>The Golden Rule</h2>
+      <blockquote>
+<p>🔒 <strong>Static configuration → IOptions</strong><br>🔁 <strong>Request-based configuration → IOptionsSnapshot</strong><br>🔄 <strong>Live &#x2F; always-on services → IOptionsMonitor</strong></p>
+</blockquote>
+<hr>
+<br>
+
+
+        <h2 id="Final-Thoughts"   >
+          <a href="#Final-Thoughts" class="heading-link"><i class="fas fa-link"></i></a><a href="#Final-Thoughts" class="headerlink" title="Final Thoughts"></a>Final Thoughts</h2>
+      <p>All three options are valid and useful.<br>Choosing the right one improves:</p>
+<ul>
+<li>clarity</li>
+<li>safety</li>
+<li>long-term maintainability</li>
+</ul>
+<p>If you are unsure:</p>
+<ul>
+<li>Web API → start with <code>IOptionsSnapshot</code></li>
+<li>Background service → use <code>IOptionsMonitor</code></li>
+<li>Security &amp; infrastructure → <code>IOptions</code></li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/asp-net-core/">asp.net core</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/net/">.net</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/configurations/">configurations</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2025/03/14/jwt-tokens/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">Understanding JWT Authentication and Authorization</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2024/10/20/dotnet-launch-settings/"><span class="paginator-prev__text">.NET – Launch Settings (Basics)</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-a-configuration-Options-class"><span class="toc-number">1.</span> <span class="toc-text">
+          Creating a configuration (Options) class</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example-appsettings-json"><span class="toc-number">1.1.</span> <span class="toc-text">
+          Example: appsettings.json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Matching-options-class"><span class="toc-number">1.2.</span> <span class="toc-text">
+          Matching options class</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Registering-the-options-in-Program-cs"><span class="toc-number">2.</span> <span class="toc-text">
+          Registering the options in Program.cs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Important"><span class="toc-number">2.1.</span> <span class="toc-text">
+          Important</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Big-Picture"><span class="toc-number">3.</span> <span class="toc-text">
+          The Big Picture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IOptions-%E2%80%94-Static-configuration"><span class="toc-number">4.</span> <span class="toc-text">
+          IOptions — Static configuration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-it-is"><span class="toc-number">4.1.</span> <span class="toc-text">
+          What it is</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-characteristics"><span class="toc-number">4.2.</span> <span class="toc-text">
+          Key characteristics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#When-to-use-it"><span class="toc-number">4.3.</span> <span class="toc-text">
+          When to use it</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IOptionsSnapshot-%E2%80%94-Per-request-configuration"><span class="toc-number">5.</span> <span class="toc-text">
+          IOptionsSnapshot — Per request configuration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-it-is-1"><span class="toc-number">5.1.</span> <span class="toc-text">
+          What it is</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-characteristics-1"><span class="toc-number">5.2.</span> <span class="toc-text">
+          Key characteristics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Important-detail"><span class="toc-number">5.3.</span> <span class="toc-text">
+          Important detail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#When-to-use-it-1"><span class="toc-number">5.4.</span> <span class="toc-text">
+          When to use it</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IOptionsMonitor-%E2%80%94-Live-configuration"><span class="toc-number">6.</span> <span class="toc-text">
+          IOptionsMonitor — Live configuration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-it-is-2"><span class="toc-number">6.1.</span> <span class="toc-text">
+          What it is</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Key-characteristics-2"><span class="toc-number">6.2.</span> <span class="toc-text">
+          Key characteristics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#When-to-use-it-2"><span class="toc-number">6.3.</span> <span class="toc-text">
+          When to use it</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Difference-This-Matters"><span class="toc-number">7.</span> <span class="toc-text">
+          Key Difference (This Matters)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IOptionsSnapshot"><span class="toc-number">7.1.</span> <span class="toc-text">
+          IOptionsSnapshot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IOptionsMonitor"><span class="toc-number">7.2.</span> <span class="toc-text">
+          IOptionsMonitor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-Table"><span class="toc-number">8.</span> <span class="toc-text">
+          Comparison Table</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Why-are-there-three-options"><span class="toc-number">9.</span> <span class="toc-text">
+          Why are there three options?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Golden-Rule"><span class="toc-number">10.</span> <span class="toc-text">
+          The Golden Rule</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Final-Thoughts"><span class="toc-number">11.</span> <span class="toc-text">
+          Final Thoughts</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/me.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Alexandr Sipco</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://www.facebook.com/alexsqnet" target="_blank" rel="noopener" data-popover="social.facebook" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-facebook"></i></span></a><a class="sidebar-ov-social-item" href="https://www.linkedin.com/in/alexandr-sipco-48265b163" target="_blank" rel="noopener" data-popover="social.linkedin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-linkedin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives"><div class="sidebar-ov-state-item__count">9</div><div class="sidebar-ov-state-item__name">Archives</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories"><div class="sidebar-ov-state-item__count">6</div><div class="sidebar-ov-state-item__name">Categories</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags"><div class="sidebar-ov-state-item__count">24</div><div class="sidebar-ov-state-item__name">Tags</div></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2025</span><span class="footer__icon"><i class="fas fa-code"></i></span><span>Alexandr Sipco</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="Search for Posts (Support multiple keywords)"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ Untitled ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', 'Please enter characters');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="/js/utils.js?v=2.8.0"></script><script src="/js/stun-boot.js?v=2.8.0"></script><script src="/js/scroll.js?v=2.8.0"></script><script src="/js/header.js?v=2.8.0"></script><script src="/js/sidebar.js?v=2.8.0"></script><script type="application/json" src="/search.xml"></script></body></html>

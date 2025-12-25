@@ -223,7 +223,7 @@ footer:
     # Heartbeat animation.
     animation: false
     # (Please use '' to wrap the value)
-    color: '#0000ff'
+    color: '#60cbed'
   # Hexo link
   powered:
     enable: false

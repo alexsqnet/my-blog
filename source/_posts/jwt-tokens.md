@@ -1,8 +1,8 @@
 ---
 title: Understanding JWT Authentication and Authorization
-date: 2025-12-20 15:55:57
-tags: [webdevelopment, authn, authz, token, jwt]
-category: ["webdevelopment"]
+date: 2025-03-14 19:55:57
+tags: [web development, authn, authz, token, jwt]
+category: ["web development"]
 
 thumbnail: uploads/jwt-tokens/cover.png
 banner: uploads/jwt-tokens/cover.png

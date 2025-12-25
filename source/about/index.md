@@ -3,7 +3,7 @@ title: about
 date: 2024-06-16 21:51:48
 ---
 
-A Software Developer in love with Technology, with over 10+ years of experience.
+A Software Developer in love with Technology.
 
 Beyond my professional life, I have a deep appreciation for continuous learning and self-development. I enjoy reading a wide range of books that expand my knowledge and inspire personal growth. Art and creativity also play a significant role in my life, allowing me to approach problem-solving with a unique perspective.
 
@@ -86,6 +86,8 @@ Currently, I work as a **Senior Full Stack .NET Developer**. In my free time, I 
 
 <h3 style="text-align: center;">~ Welcome to my blog ~</h3>
 <img src="/uploads/about_me.jpg" alt="Description" width="800">
+
+<br>
 
  <h3 style="text-align: center;"><strong>You can contact me via email at: </strong> <a href="mailto:alexandr.sco@gmail.com">alexandr.sco@gmail.com</a></h3>
 

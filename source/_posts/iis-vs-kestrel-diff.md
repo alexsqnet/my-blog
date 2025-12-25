@@ -1,7 +1,7 @@
 ---
 title: "IIS vs Kestrel: What's the Difference?"
-date: 2025-02-16 20:02:10
-tags: ["ASP.NET Core", "IIS", "Kestrel", "Web Servers"]
+date: 2024-02-16 20:02:10
+tags: ["asp.net core", "iis", "kestrel", "web servers"]
 category: ["web servers"]
 
 thumbnail: uploads/iis-vs-kestrel-diff/cover.png

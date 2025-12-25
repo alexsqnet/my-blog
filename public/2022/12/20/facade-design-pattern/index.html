@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/uploads/favicon_io/favicon-16x16.png?v=2.8.0" type="image/png" sizes="16x16"><link rel="icon" href="/uploads/favicon_io/favicon-32x32.png?v=2.8.0" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/uploads/favicon_io/apple-touch-icon.png?v=2.8.0" sizes="180x180"><meta name="description" content="What is the Facade Design Pattern?       The Facade design pattern is a structural pattern that provides a simplified interface to a complex system of classes, libraries, or frame">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Facade - Design Pattern">
+<meta property="og:url" content="https://alexsipco.net/2022/12/20/facade-design-pattern/index.html">
+<meta property="og:site_name" content="Alexandr Sipco - Software Developer&#39;s blog">
+<meta property="og:description" content="What is the Facade Design Pattern?       The Facade design pattern is a structural pattern that provides a simplified interface to a complex system of classes, libraries, or frame">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://alexsipco.net/uploads/facade-design-pattern/cover.png">
+<meta property="og:image" content="https://alexsipco.net/uploads/facade-design-pattern/metaphor-facade.png">
+<meta property="og:image" content="https://alexsipco.net/uploads/facade-design-pattern/UML.png">
+<meta property="og:image" content="https://alexsipco.net/uploads/facade-design-pattern/home-theater.jpg">
+<meta property="article:published_time" content="2022-12-20T21:13:12.000Z">
+<meta property="article:modified_time" content="2025-12-25T20:06:20.276Z">
+<meta property="article:author" content="Alexandr Sipco">
+<meta property="article:tag" content="design pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://alexsipco.net/uploads/facade-design-pattern/cover.png"><title>Facade - Design Pattern | Alexandr Sipco - Software Developer's blog</title><link ref="canonical" href="https://alexsipco.net/2022/12/20/facade-design-pattern/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.8.0"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">Categories</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">Tags</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about"><span class="header-nav-menu-item__icon"><i class="fas fa-address-card"></i></span><span class="header-nav-menu-item__text">About</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">Search</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">A software developer's blog</div><div class="header-banner-info__subtitle">Programming is the art of telling another human being what one wants the computer to do.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Facade - Design Pattern</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2022-12-20</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">Updated</span><span class="post-meta-item__value">2025-12-25</span></span></div></header><div class="post-body"><p><img src="/uploads/facade-design-pattern/cover.png" alt="Alt Text"></p>
+
+        <h1 id="What-is-the-Facade-Design-Pattern"   >
+          <a href="#What-is-the-Facade-Design-Pattern" class="heading-link"><i class="fas fa-link"></i></a><a href="#What-is-the-Facade-Design-Pattern" class="headerlink" title="What is the Facade Design Pattern?"></a>What is the Facade Design Pattern?</h1>
+      <p><strong>The Facade design pattern</strong> is a structural pattern that provides a simplified interface to a complex system of classes, libraries, or frameworks. It hides the complexities of the system and makes it easier to use by providing a unified, high-level interface.</p>
+<span id="more"></span>
+
+
+        <h1 id="Metaphor"   >
+          <a href="#Metaphor" class="heading-link"><i class="fas fa-link"></i></a><a href="#Metaphor" class="headerlink" title="Metaphor"></a>Metaphor</h1>
+      <p><img src="/uploads/facade-design-pattern/metaphor-facade.png" alt="Alt Text"><br>In this image, we see an interface through which we can easily drive the car. The driver, through this high-level interface, interacts with other complicated subsystems (engine, other components). The driver may not know these subsystems, but can use this high-level interface, which represents the Facade, to drive the car.</p>
+
+        <h1 id="UML-Diagram"   >
+          <a href="#UML-Diagram" class="heading-link"><i class="fas fa-link"></i></a><a href="#UML-Diagram" class="headerlink" title="UML Diagram"></a>UML Diagram</h1>
+      <p><img src="/uploads/facade-design-pattern/UML.png" alt="Alt Text"></p>
+
+        <h1 id="Advantages-of-Using-the-Facade-Pattern"   >
+          <a href="#Advantages-of-Using-the-Facade-Pattern" class="heading-link"><i class="fas fa-link"></i></a><a href="#Advantages-of-Using-the-Facade-Pattern" class="headerlink" title="Advantages of Using the Facade Pattern"></a>Advantages of Using the Facade Pattern</h1>
+      <ol>
+<li><strong>Simplified Interface</strong>: The Facade pattern provides a single, easy-to-use interface for complex subsystems.</li>
+<li><strong>Reduces Complexity</strong>: By hiding the intricate details of the subsystems, it reduces the learning curve and eases the use of the system.</li>
+<li><strong>Decoupling</strong>: It decouples the client code from the subsystem, making the code more modular and easier to maintain.</li>
+<li><strong>Improved Code Readability</strong>: Simplified interfaces improve the readability and manageability of the code.</li>
+</ol>
+
+        <h1 id="Implementing-the-Facade-Pattern-in-C"   >
+          <a href="#Implementing-the-Facade-Pattern-in-C" class="heading-link"><i class="fas fa-link"></i></a><a href="#Implementing-the-Facade-Pattern-in-C" class="headerlink" title="Implementing the Facade Pattern in C#"></a>Implementing the Facade Pattern in C#</h1>
+      <p>Consider a scenario where we have a complex system for managing a home theater. It consists of several subsystems: Amplifier, DVDPlayer, Projector, and Screen. Let’s implement a Facade for this system.</p>
+<p><img src="/uploads/facade-design-pattern/home-theater.jpg" alt="Alt Text"></p>
+
+        <h2 id="Subsystem-classes"   >
+          <a href="#Subsystem-classes" class="heading-link"><i class="fas fa-link"></i></a><a href="#Subsystem-classes" class="headerlink" title="Subsystem classes"></a>Subsystem classes</h2>
+      <figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Amplifier</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">On</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;Amplifier is on&quot;</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Off</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;Amplifier is off&quot;</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetVolume</span>(<span class="params"><span class="built_in">int</span> level</span>)</span> =&gt; Console.WriteLine(<span class="string">$&quot;Amplifier volume set to <span class="subst">&#123;level&#125;</span>&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DVDPlayer</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">On</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;DVD Player is on&quot;</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Off</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;DVD Player is off&quot;</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Play</span>(<span class="params"><span class="built_in">string</span> movie</span>)</span> =&gt; Console.WriteLine(<span class="string">$&quot;Playing movie: <span class="subst">&#123;movie&#125;</span>&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Projector</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">On</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;Projector is on&quot;</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Off</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;Projector is off&quot;</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">WideScreenMode</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;Projector in widescreen mode&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Screen</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Down</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;Screen is down&quot;</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Up</span>()</span> =&gt; Console.WriteLine(<span class="string">&quot;Screen is up&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="Facade-class"   >
+          <a href="#Facade-class" class="heading-link"><i class="fas fa-link"></i></a><a href="#Facade-class" class="headerlink" title="Facade class"></a>Facade class</h2>
+      <figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">HomeTheaterFacade</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Amplifier _amplifier;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> DVDPlayer _dvdPlayer;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Projector _projector;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Screen _screen;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HomeTheaterFacade</span>(<span class="params">Amplifier amplifier, DVDPlayer dvdPlayer, Projector projector, Screen screen</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _amplifier = amplifier;</span><br><span class="line">        _dvdPlayer = dvdPlayer;</span><br><span class="line">        _projector = projector;</span><br><span class="line">        _screen = screen;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">WatchMovie</span>(<span class="params"><span class="built_in">string</span> movie</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Get ready to watch a movie...&quot;</span>);</span><br><span class="line">        _screen.Down();</span><br><span class="line">        _projector.On();</span><br><span class="line">        _projector.WideScreenMode();</span><br><span class="line">        _amplifier.On();</span><br><span class="line">        _amplifier.SetVolume(<span class="number">5</span>);</span><br><span class="line">        _dvdPlayer.On();</span><br><span class="line">        _dvdPlayer.Play(movie);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">EndMovie</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Shutting movie theater down...&quot;</span>);</span><br><span class="line">        _dvdPlayer.Off();</span><br><span class="line">        _amplifier.Off();</span><br><span class="line">        _projector.Off();</span><br><span class="line">        _screen.Up();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="Using-the-Facade"   >
+          <a href="#Using-the-Facade" class="heading-link"><i class="fas fa-link"></i></a><a href="#Using-the-Facade" class="headerlink" title="Using the Facade"></a>Using the Facade</h2>
+      <figure class="highlight csharp"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Amplifier amplifier = <span class="keyword">new</span> Amplifier();</span><br><span class="line">        DVDPlayer dvdPlayer = <span class="keyword">new</span> DVDPlayer();</span><br><span class="line">        Projector projector = <span class="keyword">new</span> Projector();</span><br><span class="line">        Screen screen = <span class="keyword">new</span> Screen();</span><br><span class="line"></span><br><span class="line">        HomeTheaterFacade homeTheater = <span class="keyword">new</span> HomeTheaterFacade(amplifier, dvdPlayer, projector, screen);</span><br><span class="line"></span><br><span class="line">        homeTheater.WatchMovie(<span class="string">&quot;Predator&quot;</span>);</span><br><span class="line">        <span class="comment">// Output:</span></span><br><span class="line">        <span class="comment">// Get ready to watch a movie...</span></span><br><span class="line">        <span class="comment">// Screen is down</span></span><br><span class="line">        <span class="comment">// Projector is on</span></span><br><span class="line">        <span class="comment">// Projector in widescreen mode</span></span><br><span class="line">        <span class="comment">// Amplifier is on</span></span><br><span class="line">        <span class="comment">// Amplifier volume set to 5</span></span><br><span class="line">        <span class="comment">// DVD Player is on</span></span><br><span class="line">        <span class="comment">// Playing movie: Predator</span></span><br><span class="line"></span><br><span class="line">        homeTheater.EndMovie();</span><br><span class="line">        <span class="comment">// Output:</span></span><br><span class="line">        <span class="comment">// Shutting movie theater down...</span></span><br><span class="line">        <span class="comment">// DVD Player is off</span></span><br><span class="line">        <span class="comment">// Amplifier is off</span></span><br><span class="line">        <span class="comment">// Projector is off</span></span><br><span class="line">        <span class="comment">// Screen is up</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="Conclusion"   >
+          <a href="#Conclusion" class="heading-link"><i class="fas fa-link"></i></a><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2>
+      <p>The Facade design pattern is an excellent way to manage complexity in large systems by providing a simplified interface. In C#, the Facade pattern can significantly enhance code readability and maintainability, making it easier to interact with complex subsystems. By using the Facade pattern, you can create more modular, decoupled, and easy-to-use systems.</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/design-pattern/">design pattern</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2023/06/03/how-to-clean-audio-in-video-files/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">How to clean audio in video files</span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#What-is-the-Facade-Design-Pattern"><span class="toc-number">1.</span> <span class="toc-text">
+          What is the Facade Design Pattern?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Metaphor"><span class="toc-number">2.</span> <span class="toc-text">
+          Metaphor</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#UML-Diagram"><span class="toc-number">3.</span> <span class="toc-text">
+          UML Diagram</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Advantages-of-Using-the-Facade-Pattern"><span class="toc-number">4.</span> <span class="toc-text">
+          Advantages of Using the Facade Pattern</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Implementing-the-Facade-Pattern-in-C"><span class="toc-number">5.</span> <span class="toc-text">
+          Implementing the Facade Pattern in C#</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Subsystem-classes"><span class="toc-number">5.1.</span> <span class="toc-text">
+          Subsystem classes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Facade-class"><span class="toc-number">5.2.</span> <span class="toc-text">
+          Facade class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-the-Facade"><span class="toc-number">5.3.</span> <span class="toc-text">
+          Using the Facade</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">5.4.</span> <span class="toc-text">
+          Conclusion</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/me.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Alexandr Sipco</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://www.facebook.com/alexsqnet" target="_blank" rel="noopener" data-popover="social.facebook" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-facebook"></i></span></a><a class="sidebar-ov-social-item" href="https://www.linkedin.com/in/alexandr-sipco-48265b163" target="_blank" rel="noopener" data-popover="social.linkedin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-linkedin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives"><div class="sidebar-ov-state-item__count">9</div><div class="sidebar-ov-state-item__name">Archives</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories"><div class="sidebar-ov-state-item__count">6</div><div class="sidebar-ov-state-item__name">Categories</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags"><div class="sidebar-ov-state-item__count">24</div><div class="sidebar-ov-state-item__name">Tags</div></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2025</span><span class="footer__icon"><i class="fas fa-code"></i></span><span>Alexandr Sipco</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="Search for Posts (Support multiple keywords)"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ Untitled ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', 'Please enter characters');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="/js/utils.js?v=2.8.0"></script><script src="/js/stun-boot.js?v=2.8.0"></script><script src="/js/scroll.js?v=2.8.0"></script><script src="/js/header.js?v=2.8.0"></script><script src="/js/sidebar.js?v=2.8.0"></script><script type="application/json" src="/search.xml"></script></body></html>

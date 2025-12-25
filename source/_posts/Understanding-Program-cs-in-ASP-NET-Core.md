@@ -1,7 +1,7 @@
 ---
 title: Understanding Program.cs in ASP.NET Core
-date: 2025-12-21 20:54:44
-tags: [asp.net, c#, .net]
+date: 2024-05-20 20:54:44
+tags: [asp.net core, c#, .net]
 category: [".net"]
 
 thumbnail: uploads/Understanding-Program-cs-in-ASP-NET-Core/cover.png

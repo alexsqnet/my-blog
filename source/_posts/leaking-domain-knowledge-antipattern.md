@@ -1,6 +1,6 @@
 ---
 title: Leaking domain knowledge to tests - Anti-pattern
-date: 2024-06-17 00:56:35
+date: 2023-06-17 00:56:35
 tags: 
     - unit testing
     - anti-pattern

@@ -1,6 +1,6 @@
 ---
 title: How to clean audio in video files
-date: 2025-12-03 23:12:42
+date: 2023-06-03 23:12:42
 tags: ["audio", "video", "editing", "guide"]
 categories: ["audio engineering"]
 
