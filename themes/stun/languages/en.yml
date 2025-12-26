@@ -15,6 +15,7 @@ menu:
   archives: Archives
   categories: Categories
   tags: Tags
+  projects: My Projects
   about: About
 
 # Archives page, Categories page, Tags page
@@ -113,3 +114,4 @@ popover:
     visit_num: Visitors
   site_uv: Unique Visitor
   site_pv: Page View
+

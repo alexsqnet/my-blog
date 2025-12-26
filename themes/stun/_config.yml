@@ -54,6 +54,7 @@ menu:
   archives: /archives || fas fa-folder-open
   categories: /categories || fas fa-layer-group
   tags: /tags || fas fa-tags
+  projects: /projects || fas fa-briefcase
   about: /about || fas fa-address-card
   # You can add a secondary menu like follow.
   # xxx1: javascript:; || fa(s|r|l|d|b) fa-xxx
@@ -1032,3 +1033,4 @@ cdn:
   # share_css: //cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css
   share_js:
   share_css:
+
