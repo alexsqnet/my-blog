@@ -23,7 +23,7 @@ layout: page
     <br>
     <strong>SHA256:</strong> C8C2F16A409A7A1F828A1F996DE72385C86CA4B4748DEBCBC3CD4DF56A03CBB5
     <br>
-    <a href="/uploads/projects/muzza/artifact/muzza-win32-x64-1.0.0.zip"><strong>Download ZIP</strong></a>
+    <a href="https://drive.google.com/file/d/1RmJO_MlQe598EhNJQfnMCQ6Fjcat_161/view?usp=drive_link"><strong>Download ZIP</strong></a>
   </div>
 </div>
 
