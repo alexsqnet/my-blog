@@ -21,9 +21,9 @@ layout: page
     <br>
     <strong>Current version:</strong> 1.0.0
     <br>
-    <strong>SHA256:</strong> C8C2F16A409A7A1F828A1F996DE72385C86CA4B4748DEBCBC3CD4DF56A03CBB5
+    <strong>SHA256:</strong> E0AB4AE003AB2B78E8769AEBB6D5630031B402AFE8677BE3B8CD7E8F12D77133
     <br>
-    <a href="https://drive.google.com/file/d/1RmJO_MlQe598EhNJQfnMCQ6Fjcat_161/view?usp=drive_link"><strong>Download ZIP</strong></a>
+    <a href="https://drive.google.com/file/d/1wo6ubAuS1dT8Yo_IaHhgFqDAUxx9bCLh/view?usp=sharing"><strong>Download ZIP</strong></a>
   </div>
 </div>
 
