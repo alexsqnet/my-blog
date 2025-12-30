@@ -84,9 +84,9 @@
       
         <tags>
             
-            <tag> asp.net core </tag>
-            
             <tag> .net </tag>
+            
+            <tag> asp.net core </tag>
             
             <tag> configurations </tag>
             
@@ -142,11 +142,11 @@
       
         <tags>
             
+            <tag> .net </tag>
+            
             <tag> asp.net core </tag>
             
             <tag> c# </tag>
-            
-            <tag> .net </tag>
             
         </tags>
       

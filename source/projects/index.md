@@ -26,7 +26,7 @@ layout: page
     <a href="https://drive.google.com/file/d/1wo6ubAuS1dT8Yo_IaHhgFqDAUxx9bCLh/view?usp=sharing"><strong>Download ZIP</strong></a>
   </div>
 </div>
-
+ 
 #### Screenshots
 <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0;">
   <img class="project-shot" src="/uploads/projects/muzza/images/screenshot1.png" data-full="/uploads/projects/muzza/images/screenshot1.png" alt="Muzza screenshot 1" style="width: 260px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer;" data-zoom="none">
