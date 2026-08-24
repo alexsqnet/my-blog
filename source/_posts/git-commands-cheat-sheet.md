@@ -1,6 +1,6 @@
 ---
 title: Git Commands Cheat Sheet
-date: 2016-02-25 00:17:21
+date: 2025-02-25 00:17:21
 tags: [git, cli]
 category: ["git"]
 ---
