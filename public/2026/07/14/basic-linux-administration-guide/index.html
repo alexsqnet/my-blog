@@ -1,0 +1,1068 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/uploads/favicon_io/favicon-16x16.png?v=2.8.0" type="image/png" sizes="16x16"><link rel="icon" href="/uploads/favicon_io/favicon-32x32.png?v=2.8.0" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/uploads/favicon_io/apple-touch-icon.png?v=2.8.0" sizes="180x180"><meta name="description" content="This guide contains common Linux administration commands useful when managing a VPS, especially Ubuntu&#x2F;Debian-based servers.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Basic Linux Administration Guide">
+<meta property="og:url" content="https://alexsipco.net/2026/07/14/basic-linux-administration-guide/index.html">
+<meta property="og:site_name" content="Alexandr Sipco - Software Developer&#39;s handbook">
+<meta property="og:description" content="This guide contains common Linux administration commands useful when managing a VPS, especially Ubuntu&#x2F;Debian-based servers.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-14T20:23:05.000Z">
+<meta property="article:modified_time" content="2026-08-24T20:43:14.236Z">
+<meta property="article:author" content="Alexandr Sipco">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="administration">
+<meta name="twitter:card" content="summary"><title>Basic Linux Administration Guide | Alexandr Sipco - Software Developer's handbook</title><link ref="canonical" href="https://alexsipco.net/2026/07/14/basic-linux-administration-guide/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.8.0"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">Categories</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">Tags</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/projects"><span class="header-nav-menu-item__icon"><i class="fas fa-briefcase"></i></span><span class="header-nav-menu-item__text">My Projects</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about"><span class="header-nav-menu-item__icon"><i class="fas fa-address-card"></i></span><span class="header-nav-menu-item__text">About</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">Search</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">My Developer Handbook</div><div class="header-banner-info__subtitle">Programming is the art of telling another human being what one wants the computer to do.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Basic Linux Administration Guide</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2026-07-14</span></span></div></header><div class="post-body"><p>This guide contains common Linux administration commands useful when managing a VPS, especially Ubuntu&#x2F;Debian-based servers.</p>
+<span id="more"></span>
+
+<blockquote>
+<p>Most administrative commands require <code>sudo</code>.</p>
+</blockquote>
+<hr>
+
+        <h2 id="1-Check-the-current-user"   >
+          <a href="#1-Check-the-current-user" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-Check-the-current-user" class="headerlink" title="1. Check the current user"></a>1. Check the current user</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Show information about the current user and groups:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">id</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Show currently logged-in users:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">who</span></span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="2-Create-a-new-user"   >
+          <a href="#2-Create-a-new-user" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-Create-a-new-user" class="headerlink" title="2. Create a new user"></a>2. Create a new user</h2>
+      <p>Create a new user:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo adduser username</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo adduser deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>The command will ask you to set a password and optionally enter additional user information.</p>
+<p>Check that the user exists:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">id</span> deployuser</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="3-Add-a-user-to-the-sudo-group"   >
+          <a href="#3-Add-a-user-to-the-sudo-group" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-Add-a-user-to-the-sudo-group" class="headerlink" title="3. Add a user to the sudo group"></a>3. Add a user to the sudo group</h2>
+      <p>On Ubuntu&#x2F;Debian, users in the <code>sudo</code> group can execute administrative commands.</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG sudo username</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG sudo deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Verify the user’s groups:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">groups</span> deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>or:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">id</span> deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>You should see:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo</span><br></pre></td></tr></table></div></figure>
+
+<p>The user may need to log out and log back in before the new group membership is applied.</p>
+<hr>
+
+        <h2 id="4-Test-sudo-access"   >
+          <a href="#4-Test-sudo-access" class="heading-link"><i class="fas fa-link"></i></a><a href="#4-Test-sudo-access" class="headerlink" title="4. Test sudo access"></a>4. Test sudo access</h2>
+      <p>Switch to the user:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Then test:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">whoami</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Expected result:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="5-Switch-users"   >
+          <a href="#5-Switch-users" class="heading-link"><i class="fas fa-link"></i></a><a href="#5-Switch-users" class="headerlink" title="5. Switch users"></a>5. Switch users</h2>
+      <p>Switch to another user:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - username</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Open a root shell:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -i</span><br></pre></td></tr></table></div></figure>
+
+<p>Exit the current shell:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="6-Change-a-user’s-password"   >
+          <a href="#6-Change-a-user’s-password" class="heading-link"><i class="fas fa-link"></i></a><a href="#6-Change-a-user’s-password" class="headerlink" title="6. Change a user’s password"></a>6. Change a user’s password</h2>
+      <p>Change your own password:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></div></figure>
+
+<p>Change another user’s password:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd username</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd deployuser</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="7-Lock-or-unlock-a-user-account"   >
+          <a href="#7-Lock-or-unlock-a-user-account" class="heading-link"><i class="fas fa-link"></i></a><a href="#7-Lock-or-unlock-a-user-account" class="headerlink" title="7. Lock or unlock a user account"></a>7. Lock or unlock a user account</h2>
+      <p>Lock a user:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd -l username</span><br></pre></td></tr></table></div></figure>
+
+<p>Unlock a user:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd -u username</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="8-Delete-a-user"   >
+          <a href="#8-Delete-a-user" class="heading-link"><i class="fas fa-link"></i></a><a href="#8-Delete-a-user" class="headerlink" title="8. Delete a user"></a>8. Delete a user</h2>
+      <p>Delete a user but keep their home directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo deluser username</span><br></pre></td></tr></table></div></figure>
+
+<p>Delete the user and their home directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo deluser --remove-home username</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo deluser --remove-home deployuser</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="9-Create-and-manage-groups"   >
+          <a href="#9-Create-and-manage-groups" class="heading-link"><i class="fas fa-link"></i></a><a href="#9-Create-and-manage-groups" class="headerlink" title="9. Create and manage groups"></a>9. Create and manage groups</h2>
+      <p>Create a group:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo groupadd groupname</span><br></pre></td></tr></table></div></figure>
+
+<p>Add a user to a group:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG groupname username</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove a user from a group:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo deluser username groupname</span><br></pre></td></tr></table></div></figure>
+
+<p>List all groups:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/group</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="10-File-and-directory-navigation"   >
+          <a href="#10-File-and-directory-navigation" class="heading-link"><i class="fas fa-link"></i></a><a href="#10-File-and-directory-navigation" class="headerlink" title="10. File and directory navigation"></a>10. File and directory navigation</h2>
+      <p>Show the current directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pwd</span></span><br></pre></td></tr></table></div></figure>
+
+<p>List files:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Detailed listing:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la</span><br></pre></td></tr></table></div></figure>
+
+<p>Change directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /path/to/directory</span><br></pre></td></tr></table></div></figure>
+
+<p>Go to the home directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br></pre></td></tr></table></div></figure>
+
+<p>Go one directory up:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ..</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="11-Create-files-and-directories"   >
+          <a href="#11-Create-files-and-directories" class="heading-link"><i class="fas fa-link"></i></a><a href="#11-Create-files-and-directories" class="headerlink" title="11. Create files and directories"></a>11. Create files and directories</h2>
+      <p>Create a directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> directory-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Create nested directories:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p parent/child</span><br></pre></td></tr></table></div></figure>
+
+<p>Create an empty file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> file.txt</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="12-Copy-move-and-delete-files"   >
+          <a href="#12-Copy-move-and-delete-files" class="heading-link"><i class="fas fa-link"></i></a><a href="#12-Copy-move-and-delete-files" class="headerlink" title="12. Copy, move, and delete files"></a>12. Copy, move, and delete files</h2>
+      <p>Copy a file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> source.txt destination.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Copy a directory recursively:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> -r source-directory destination-directory</span><br></pre></td></tr></table></div></figure>
+
+<p>Move or rename a file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> old-name new-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Delete a file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Delete a directory recursively:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -r directory</span><br></pre></td></tr></table></div></figure>
+
+<p>Force recursive deletion:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rm</span> -rf directory</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>Be very careful with <code>rm -rf</code>. Deleted files are usually not recoverable.</p>
+</blockquote>
+<hr>
+
+        <h2 id="13-View-file-contents"   >
+          <a href="#13-View-file-contents" class="heading-link"><i class="fas fa-link"></i></a><a href="#13-View-file-contents" class="headerlink" title="13. View file contents"></a>13. View file contents</h2>
+      <p>Display a file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Read a file page by page:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Show the first lines:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">head</span> file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Show the last lines:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">tail</span> file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Follow a log file in real time:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">tail</span> -f /var/log/syslog</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="14-Edit-files"   >
+          <a href="#14-Edit-files" class="heading-link"><i class="fas fa-link"></i></a><a href="#14-Edit-files" class="headerlink" title="14. Edit files"></a>14. Edit files</h2>
+      <p>Using Nano:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Useful Nano shortcuts:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Ctrl + O  -&gt; save</span><br><span class="line">Ctrl + X  -&gt; exit</span><br><span class="line">Ctrl + W  -&gt; search</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="15-File-ownership"   >
+          <a href="#15-File-ownership" class="heading-link"><i class="fas fa-link"></i></a><a href="#15-File-ownership" class="headerlink" title="15. File ownership"></a>15. File ownership</h2>
+      <p>Show ownership:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -l</span><br></pre></td></tr></table></div></figure>
+
+<p>Change the owner of a file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> username file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Change owner and group:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> username:groupname file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Change ownership recursively:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> -R username:groupname directory</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> -R deployuser:deployuser /opt/myapp</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="16-File-permissions"   >
+          <a href="#16-File-permissions" class="heading-link"><i class="fas fa-link"></i></a><a href="#16-File-permissions" class="headerlink" title="16. File permissions"></a>16. File permissions</h2>
+      <p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 644 file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Common permission values:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">600 -&gt; owner read/write only</span><br><span class="line">644 -&gt; owner read/write, everyone else read</span><br><span class="line">700 -&gt; owner full access only</span><br><span class="line">755 -&gt; owner full access, others read/execute</span><br></pre></td></tr></table></div></figure>
+
+<p>Example for an SSH directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 700 ~/.ssh</span><br><span class="line"><span class="built_in">chmod</span> 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></div></figure>
+
+<p>Make a script executable:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x script.sh</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="17-Check-disk-usage"   >
+          <a href="#17-Check-disk-usage" class="heading-link"><i class="fas fa-link"></i></a><a href="#17-Check-disk-usage" class="headerlink" title="17. Check disk usage"></a>17. Check disk usage</h2>
+      <p>Show filesystem usage:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br></pre></td></tr></table></div></figure>
+
+<p>Show the size of a directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">du</span> -sh /path/to/directory</span><br></pre></td></tr></table></div></figure>
+
+<p>Show directory sizes:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">du</span> -h --max-depth=1 /path/to/directory</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">du</span> -h --max-depth=1 /var</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="18-Check-memory-usage"   >
+          <a href="#18-Check-memory-usage" class="heading-link"><i class="fas fa-link"></i></a><a href="#18-Check-memory-usage" class="headerlink" title="18. Check memory usage"></a>18. Check memory usage</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -h</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="19-Check-CPU-and-running-processes"   >
+          <a href="#19-Check-CPU-and-running-processes" class="heading-link"><i class="fas fa-link"></i></a><a href="#19-Check-CPU-and-running-processes" class="headerlink" title="19. Check CPU and running processes"></a>19. Check CPU and running processes</h2>
+      <p>Interactive process viewer:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top</span><br></pre></td></tr></table></div></figure>
+
+<p>A more convenient alternative:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htop</span><br></pre></td></tr></table></div></figure>
+
+<p>Install it if necessary:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install htop</span><br></pre></td></tr></table></div></figure>
+
+<p>List processes:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux</span><br></pre></td></tr></table></div></figure>
+
+<p>Find a process:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep process-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep nginx</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="20-Stop-a-process"   >
+          <a href="#20-Stop-a-process" class="heading-link"><i class="fas fa-link"></i></a><a href="#20-Stop-a-process" class="headerlink" title="20. Stop a process"></a>20. Stop a process</h2>
+      <p>Find the PID:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep process-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Gracefully stop it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> PID</span><br></pre></td></tr></table></div></figure>
+
+<p>Force stop:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 PID</span><br></pre></td></tr></table></div></figure>
+
+<p>Use <code>kill -9</code> only when a normal <code>kill</code> does not work.</p>
+<hr>
+
+        <h2 id="21-Manage-services-with-systemd"   >
+          <a href="#21-Manage-services-with-systemd" class="heading-link"><i class="fas fa-link"></i></a><a href="#21-Manage-services-with-systemd" class="headerlink" title="21. Manage services with systemd"></a>21. Manage services with systemd</h2>
+      <p>Check a service:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Start a service:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Stop a service:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Restart a service:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Reload configuration:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl reload nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Enable a service at boot:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Disable it at boot:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">disable</span> nginx</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="22-View-service-logs"   >
+          <a href="#22-View-service-logs" class="heading-link"><i class="fas fa-link"></i></a><a href="#22-View-service-logs" class="headerlink" title="22. View service logs"></a>22. View service logs</h2>
+      <p>Show logs for a service:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo journalctl -u nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Follow logs in real time:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo journalctl -u nginx -f</span><br></pre></td></tr></table></div></figure>
+
+<p>Show logs from the current boot:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo journalctl -b</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="23-Update-the-server"   >
+          <a href="#23-Update-the-server" class="heading-link"><i class="fas fa-link"></i></a><a href="#23-Update-the-server" class="headerlink" title="23. Update the server"></a>23. Update the server</h2>
+      <p>Refresh available package information:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br></pre></td></tr></table></div></figure>
+
+<p>Upgrade installed packages:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></div></figure>
+
+<p>Run both:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt upgrade</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove unused packages:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt autoremove</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="24-Install-and-remove-software"   >
+          <a href="#24-Install-and-remove-software" class="heading-link"><i class="fas fa-link"></i></a><a href="#24-Install-and-remove-software" class="headerlink" title="24. Install and remove software"></a>24. Install and remove software</h2>
+      <p>Install a package:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install package-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install curl</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove a package:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove package-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove package and configuration files:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt purge package-name</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="25-Check-Linux-version"   >
+          <a href="#25-Check-Linux-version" class="heading-link"><i class="fas fa-link"></i></a><a href="#25-Check-Linux-version" class="headerlink" title="25. Check Linux version"></a>25. Check Linux version</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br></pre></td></tr></table></div></figure>
+
+<p>Kernel version:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br></pre></td></tr></table></div></figure>
+
+<p>Hostname:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname</span><br></pre></td></tr></table></div></figure>
+
+<p>More host information:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="26-Change-the-hostname"   >
+          <a href="#26-Change-the-hostname" class="heading-link"><i class="fas fa-link"></i></a><a href="#26-Change-the-hostname" class="headerlink" title="26. Change the hostname"></a>26. Change the hostname</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo hostnamectl set-hostname new-hostname</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo hostnamectl set-hostname my-vps</span><br></pre></td></tr></table></div></figure>
+
+<p>Check it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="27-Network-information"   >
+          <a href="#27-Network-information" class="heading-link"><i class="fas fa-link"></i></a><a href="#27-Network-information" class="headerlink" title="27. Network information"></a>27. Network information</h2>
+      <p>Show IP addresses:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip addr</span><br></pre></td></tr></table></div></figure>
+
+<p>Short version:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip a</span><br></pre></td></tr></table></div></figure>
+
+<p>Show routes:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route</span><br></pre></td></tr></table></div></figure>
+
+<p>Test network connectivity:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping google.com</span><br></pre></td></tr></table></div></figure>
+
+<p>Find the public IP:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl ifconfig.me</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="28-Check-open-listening-ports"   >
+          <a href="#28-Check-open-listening-ports" class="heading-link"><i class="fas fa-link"></i></a><a href="#28-Check-open-listening-ports" class="headerlink" title="28. Check open&#x2F;listening ports"></a>28. Check open&#x2F;listening ports</h2>
+      <p>Recommended:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ss -tulpn</span><br></pre></td></tr></table></div></figure>
+
+<p>Typical output can show services listening on ports such as:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">22   SSH</span><br><span class="line">80   HTTP</span><br><span class="line">443  HTTPS</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="29-Check-which-process-uses-a-port"   >
+          <a href="#29-Check-which-process-uses-a-port" class="heading-link"><i class="fas fa-link"></i></a><a href="#29-Check-which-process-uses-a-port" class="headerlink" title="29. Check which process uses a port"></a>29. Check which process uses a port</h2>
+      <p>Example for port <code>80</code>:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lsof -i :80</span><br></pre></td></tr></table></div></figure>
+
+<p>or:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ss -ltnp | grep :80</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="30-Basic-firewall-with-UFW"   >
+          <a href="#30-Basic-firewall-with-UFW" class="heading-link"><i class="fas fa-link"></i></a><a href="#30-Basic-firewall-with-UFW" class="headerlink" title="30. Basic firewall with UFW"></a>30. Basic firewall with UFW</h2>
+      <p>Install UFW if necessary:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install ufw</span><br></pre></td></tr></table></div></figure>
+
+<p>Allow SSH before enabling the firewall:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw allow OpenSSH</span><br></pre></td></tr></table></div></figure>
+
+<p>Allow HTTP:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw allow 80/tcp</span><br></pre></td></tr></table></div></figure>
+
+<p>Allow HTTPS:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw allow 443/tcp</span><br></pre></td></tr></table></div></figure>
+
+<p>Enable UFW:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw <span class="built_in">enable</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Check status:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status</span><br></pre></td></tr></table></div></figure>
+
+<p>Detailed status:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status verbose</span><br></pre></td></tr></table></div></figure>
+
+<p>Show firewall rules with rule numbers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status numbered</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>Always allow SSH before enabling UFW on a remote VPS, otherwise you may lock yourself out.</p>
+</blockquote>
+
+        <h3 id="Block-an-IP-address"   >
+          <a href="#Block-an-IP-address" class="heading-link"><i class="fas fa-link"></i></a><a href="#Block-an-IP-address" class="headerlink" title="Block an IP address"></a>Block an IP address</h3>
+      <p>Block all incoming traffic from a specific IP:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw deny from 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>Block an IP only from accessing a specific port, for example SSH on port <code>22</code>:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw deny from 203.0.113.10 to any port 22</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Check-whether-an-IP-is-blocked"   >
+          <a href="#Check-whether-an-IP-is-blocked" class="heading-link"><i class="fas fa-link"></i></a><a href="#Check-whether-an-IP-is-blocked" class="headerlink" title="Check whether an IP is blocked"></a>Check whether an IP is blocked</h3>
+      <p>Search the current UFW rules for a specific IP:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status | grep 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>For numbered rules:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status numbered</span><br></pre></td></tr></table></div></figure>
+
+<p>If the IP appears in a rule similar to:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DENY IN    203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>then UFW is configured to block traffic from that IP.</p>
+<p>You can also inspect the active UFW rules in more detail:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw show raw</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Unblock-an-IP-address"   >
+          <a href="#Unblock-an-IP-address" class="heading-link"><i class="fas fa-link"></i></a><a href="#Unblock-an-IP-address" class="headerlink" title="Unblock an IP address"></a>Unblock an IP address</h3>
+      <p>If the IP was blocked with:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw deny from 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>remove that rule with:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw delete deny from 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>If the IP was blocked only for a specific port:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw delete deny from 203.0.113.10 to any port 22</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Remove-a-rule-by-number"   >
+          <a href="#Remove-a-rule-by-number" class="heading-link"><i class="fas fa-link"></i></a><a href="#Remove-a-rule-by-number" class="headerlink" title="Remove a rule by number"></a>Remove a rule by number</h3>
+      <p>First list numbered rules:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status numbered</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ 1] 22/tcp                     ALLOW IN    Anywhere</span><br><span class="line">[ 2] Anywhere                   DENY IN     203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>Delete rule number <code>2</code>:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw delete 2</span><br></pre></td></tr></table></div></figure>
+
+<p>Then verify the result:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw status numbered</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>Be careful when deleting rules by number. Rule numbers can change after a rule is removed.</p>
+</blockquote>
+
+        <h3 id="Reload-UFW"   >
+          <a href="#Reload-UFW" class="heading-link"><i class="fas fa-link"></i></a><a href="#Reload-UFW" class="headerlink" title="Reload UFW"></a>Reload UFW</h3>
+      <p>Most UFW rule changes are applied immediately, but you can reload the firewall if needed:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw reload</span><br></pre></td></tr></table></div></figure>
+
+
+
+        <h2 id="32-Fail2ban-basics"   >
+          <a href="#32-Fail2ban-basics" class="heading-link"><i class="fas fa-link"></i></a><a href="#32-Fail2ban-basics" class="headerlink" title="32. Fail2ban basics"></a>32. Fail2ban basics</h2>
+      <p>Fail2ban can automatically block IP addresses that repeatedly fail authentication attempts, such as SSH login attempts.</p>
+<p>Install Fail2ban:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install fail2ban</span><br></pre></td></tr></table></div></figure>
+
+<p>Check the Fail2ban service:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status fail2ban</span><br></pre></td></tr></table></div></figure>
+
+<p>Start Fail2ban:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start fail2ban</span><br></pre></td></tr></table></div></figure>
+
+<p>Enable it at boot:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> fail2ban</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Check-active-jails"   >
+          <a href="#Check-active-jails" class="heading-link"><i class="fas fa-link"></i></a><a href="#Check-active-jails" class="headerlink" title="Check active jails"></a>Check active jails</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client status</span><br></pre></td></tr></table></div></figure>
+
+<p>Typical output may include:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Jail list: sshd</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Check-SSH-jail-status"   >
+          <a href="#Check-SSH-jail-status" class="heading-link"><i class="fas fa-link"></i></a><a href="#Check-SSH-jail-status" class="headerlink" title="Check SSH jail status"></a>Check SSH jail status</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client status sshd</span><br></pre></td></tr></table></div></figure>
+
+<p>This shows information such as:</p>
+<ul>
+<li>currently failed attempts;</li>
+<li>total failed attempts;</li>
+<li>currently banned IPs;</li>
+<li>total banned IPs;</li>
+<li>the list of banned IP addresses.</li>
+</ul>
+<p>Example output:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Status for the jail: sshd</span><br><span class="line">|- Filter</span><br><span class="line">|  |- Currently failed: 0</span><br><span class="line">|  `- Total failed: 12</span><br><span class="line">`- Actions</span><br><span class="line">   |- Currently banned: 1</span><br><span class="line">   |- Total banned: 3</span><br><span class="line">   `- Banned IP list: 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Check-whether-a-specific-IP-is-banned"   >
+          <a href="#Check-whether-a-specific-IP-is-banned" class="heading-link"><i class="fas fa-link"></i></a><a href="#Check-whether-a-specific-IP-is-banned" class="headerlink" title="Check whether a specific IP is banned"></a>Check whether a specific IP is banned</h3>
+      <p>You can inspect the SSH jail:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client status sshd</span><br></pre></td></tr></table></div></figure>
+
+<p>Or search for a specific IP:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client status sshd | grep 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>If the IP appears in the <code>Banned IP list</code>, it is currently banned by Fail2ban.</p>
+
+        <h3 id="Unban-an-IP-address"   >
+          <a href="#Unban-an-IP-address" class="heading-link"><i class="fas fa-link"></i></a><a href="#Unban-an-IP-address" class="headerlink" title="Unban an IP address"></a>Unban an IP address</h3>
+      <p>Unban an IP from the SSH jail:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client <span class="built_in">set</span> sshd unbanip 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client <span class="built_in">set</span> sshd unbanip 89.x.x.x</span><br></pre></td></tr></table></div></figure>
+
+<p>Then verify:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client status sshd</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Manually-ban-an-IP"   >
+          <a href="#Manually-ban-an-IP" class="heading-link"><i class="fas fa-link"></i></a><a href="#Manually-ban-an-IP" class="headerlink" title="Manually ban an IP"></a>Manually ban an IP</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fail2ban-client <span class="built_in">set</span> sshd banip 203.0.113.10</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Check-Fail2ban-logs"   >
+          <a href="#Check-Fail2ban-logs" class="heading-link"><i class="fas fa-link"></i></a><a href="#Check-Fail2ban-logs" class="headerlink" title="Check Fail2ban logs"></a>Check Fail2ban logs</h3>
+      <p>On Ubuntu&#x2F;Debian:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">tail</span> -f /var/log/fail2ban.<span class="built_in">log</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Search for bans:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo grep <span class="string">&quot;Ban &quot;</span> /var/log/fail2ban.<span class="built_in">log</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Search for unbans:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo grep <span class="string">&quot;Unban &quot;</span> /var/log/fail2ban.<span class="built_in">log</span></span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Restart-Fail2ban"   >
+          <a href="#Restart-Fail2ban" class="heading-link"><i class="fas fa-link"></i></a><a href="#Restart-Fail2ban" class="headerlink" title="Restart Fail2ban"></a>Restart Fail2ban</h3>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart fail2ban</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>UFW and Fail2ban are different tools. UFW manages firewall rules, while Fail2ban watches logs and can dynamically add or remove blocks based on suspicious behavior.</p>
+</blockquote>
+<hr>
+
+        <h2 id="32-Reboot-or-shut-down-the-server"   >
+          <a href="#32-Reboot-or-shut-down-the-server" class="heading-link"><i class="fas fa-link"></i></a><a href="#32-Reboot-or-shut-down-the-server" class="headerlink" title="32. Reboot or shut down the server"></a>32. Reboot or shut down the server</h2>
+      <p>Reboot:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo reboot</span><br></pre></td></tr></table></div></figure>
+
+<p>Shutdown:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo shutdown now</span><br></pre></td></tr></table></div></figure>
+
+<p>Schedule shutdown:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo shutdown +10</span><br></pre></td></tr></table></div></figure>
+
+<p>This shuts down the server in 10 minutes.</p>
+<p>Cancel a scheduled shutdown:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo shutdown -c</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="33-Useful-directories"   >
+          <a href="#33-Useful-directories" class="heading-link"><i class="fas fa-link"></i></a><a href="#33-Useful-directories" class="headerlink" title="33. Useful directories"></a>33. Useful directories</h2>
+      <p>Common Linux directories:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/home          -&gt; user home directories</span><br><span class="line">/root          -&gt; root user&#x27;s home directory</span><br><span class="line">/etc           -&gt; system configuration</span><br><span class="line">/var           -&gt; logs and changing application data</span><br><span class="line">/var/log       -&gt; logs</span><br><span class="line">/opt           -&gt; optional/custom software</span><br><span class="line">/tmp           -&gt; temporary files</span><br><span class="line">/usr           -&gt; installed programs and libraries</span><br><span class="line">/srv           -&gt; service/application data</span><br></pre></td></tr></table></div></figure>
+
+<p>A useful place for your own deployed application can be:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/myapp</span><br></pre></td></tr></table></div></figure>
+
+<p>or:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/srv/myapp</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="34-Example-Create-a-dedicated-VPS-user"   >
+          <a href="#34-Example-Create-a-dedicated-VPS-user" class="heading-link"><i class="fas fa-link"></i></a><a href="#34-Example-Create-a-dedicated-VPS-user" class="headerlink" title="34. Example: Create a dedicated VPS user"></a>34. Example: Create a dedicated VPS user</h2>
+      <p>Create the user:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo adduser deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Give sudo access:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG sudo deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Check groups:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">groups</span> deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Switch to the user:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - deployuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Test sudo:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">whoami</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Expected result:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root</span><br></pre></td></tr></table></div></figure>
+
+<p>Then configure SSH key authentication for that user and disable password-based SSH login after verifying that the key works.</p>
+<hr>
+
+        <h2 id="35-Useful-daily-commands"   >
+          <a href="#35-Useful-daily-commands" class="heading-link"><i class="fas fa-link"></i></a><a href="#35-Useful-daily-commands" class="headerlink" title="35. Useful daily commands"></a>35. Useful daily commands</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line"><span class="built_in">pwd</span></span><br><span class="line"><span class="built_in">ls</span> -la</span><br><span class="line"><span class="built_in">df</span> -h</span><br><span class="line">free -h</span><br><span class="line">top</span><br><span class="line">ip a</span><br><span class="line">sudo ss -tulpn</span><br><span class="line">sudo systemctl status SERVICE</span><br><span class="line">sudo journalctl -u SERVICE -f</span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="Security-recommendations-for-a-VPS"   >
+          <a href="#Security-recommendations-for-a-VPS" class="heading-link"><i class="fas fa-link"></i></a><a href="#Security-recommendations-for-a-VPS" class="headerlink" title="Security recommendations for a VPS"></a>Security recommendations for a VPS</h2>
+      <p>For a public server:</p>
+<ul>
+<li>use SSH keys instead of SSH passwords;</li>
+<li>disable direct root SSH login;</li>
+<li>keep the server updated;</li>
+<li>use a firewall;</li>
+<li>expose only required ports;</li>
+<li>avoid running applications as <code>root</code>;</li>
+<li>create separate users where appropriate;</li>
+<li>use strong permissions on configuration and secret files;</li>
+<li>regularly back up important data;</li>
+<li>never commit passwords, private keys, tokens, or production secrets to Git.</li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/linux/">linux</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/administration/">administration</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2026/08/24/secure-ssh-configuration-ssh-key-authentication-only/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">Secure SSH Configuration - SSH Key Authentication Only</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2026/06/20/docker-basic-administration-guide/"><span class="paginator-prev__text">Docker - Basic Administration Guide</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Check-the-current-user"><span class="toc-number">1.</span> <span class="toc-text">
+          1. Check the current user</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Create-a-new-user"><span class="toc-number">2.</span> <span class="toc-text">
+          2. Create a new user</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Add-a-user-to-the-sudo-group"><span class="toc-number">3.</span> <span class="toc-text">
+          3. Add a user to the sudo group</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Test-sudo-access"><span class="toc-number">4.</span> <span class="toc-text">
+          4. Test sudo access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Switch-users"><span class="toc-number">5.</span> <span class="toc-text">
+          5. Switch users</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Change-a-user%E2%80%99s-password"><span class="toc-number">6.</span> <span class="toc-text">
+          6. Change a user’s password</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Lock-or-unlock-a-user-account"><span class="toc-number">7.</span> <span class="toc-text">
+          7. Lock or unlock a user account</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Delete-a-user"><span class="toc-number">8.</span> <span class="toc-text">
+          8. Delete a user</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Create-and-manage-groups"><span class="toc-number">9.</span> <span class="toc-text">
+          9. Create and manage groups</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-File-and-directory-navigation"><span class="toc-number">10.</span> <span class="toc-text">
+          10. File and directory navigation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-Create-files-and-directories"><span class="toc-number">11.</span> <span class="toc-text">
+          11. Create files and directories</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-Copy-move-and-delete-files"><span class="toc-number">12.</span> <span class="toc-text">
+          12. Copy, move, and delete files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-View-file-contents"><span class="toc-number">13.</span> <span class="toc-text">
+          13. View file contents</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-Edit-files"><span class="toc-number">14.</span> <span class="toc-text">
+          14. Edit files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-File-ownership"><span class="toc-number">15.</span> <span class="toc-text">
+          15. File ownership</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-File-permissions"><span class="toc-number">16.</span> <span class="toc-text">
+          16. File permissions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#17-Check-disk-usage"><span class="toc-number">17.</span> <span class="toc-text">
+          17. Check disk usage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18-Check-memory-usage"><span class="toc-number">18.</span> <span class="toc-text">
+          18. Check memory usage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#19-Check-CPU-and-running-processes"><span class="toc-number">19.</span> <span class="toc-text">
+          19. Check CPU and running processes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#20-Stop-a-process"><span class="toc-number">20.</span> <span class="toc-text">
+          20. Stop a process</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-Manage-services-with-systemd"><span class="toc-number">21.</span> <span class="toc-text">
+          21. Manage services with systemd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-View-service-logs"><span class="toc-number">22.</span> <span class="toc-text">
+          22. View service logs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#23-Update-the-server"><span class="toc-number">23.</span> <span class="toc-text">
+          23. Update the server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#24-Install-and-remove-software"><span class="toc-number">24.</span> <span class="toc-text">
+          24. Install and remove software</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#25-Check-Linux-version"><span class="toc-number">25.</span> <span class="toc-text">
+          25. Check Linux version</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#26-Change-the-hostname"><span class="toc-number">26.</span> <span class="toc-text">
+          26. Change the hostname</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#27-Network-information"><span class="toc-number">27.</span> <span class="toc-text">
+          27. Network information</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#28-Check-open-listening-ports"><span class="toc-number">28.</span> <span class="toc-text">
+          28. Check open&#x2F;listening ports</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#29-Check-which-process-uses-a-port"><span class="toc-number">29.</span> <span class="toc-text">
+          29. Check which process uses a port</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#30-Basic-firewall-with-UFW"><span class="toc-number">30.</span> <span class="toc-text">
+          30. Basic firewall with UFW</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Block-an-IP-address"><span class="toc-number">30.1.</span> <span class="toc-text">
+          Block an IP address</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-whether-an-IP-is-blocked"><span class="toc-number">30.2.</span> <span class="toc-text">
+          Check whether an IP is blocked</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unblock-an-IP-address"><span class="toc-number">30.3.</span> <span class="toc-text">
+          Unblock an IP address</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Remove-a-rule-by-number"><span class="toc-number">30.4.</span> <span class="toc-text">
+          Remove a rule by number</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reload-UFW"><span class="toc-number">30.5.</span> <span class="toc-text">
+          Reload UFW</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-Fail2ban-basics"><span class="toc-number">31.</span> <span class="toc-text">
+          32. Fail2ban basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-active-jails"><span class="toc-number">31.1.</span> <span class="toc-text">
+          Check active jails</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-SSH-jail-status"><span class="toc-number">31.2.</span> <span class="toc-text">
+          Check SSH jail status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-whether-a-specific-IP-is-banned"><span class="toc-number">31.3.</span> <span class="toc-text">
+          Check whether a specific IP is banned</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unban-an-IP-address"><span class="toc-number">31.4.</span> <span class="toc-text">
+          Unban an IP address</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Manually-ban-an-IP"><span class="toc-number">31.5.</span> <span class="toc-text">
+          Manually ban an IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-Fail2ban-logs"><span class="toc-number">31.6.</span> <span class="toc-text">
+          Check Fail2ban logs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Restart-Fail2ban"><span class="toc-number">31.7.</span> <span class="toc-text">
+          Restart Fail2ban</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-Reboot-or-shut-down-the-server"><span class="toc-number">32.</span> <span class="toc-text">
+          32. Reboot or shut down the server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#33-Useful-directories"><span class="toc-number">33.</span> <span class="toc-text">
+          33. Useful directories</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#34-Example-Create-a-dedicated-VPS-user"><span class="toc-number">34.</span> <span class="toc-text">
+          34. Example: Create a dedicated VPS user</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#35-Useful-daily-commands"><span class="toc-number">35.</span> <span class="toc-text">
+          35. Useful daily commands</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security-recommendations-for-a-VPS"><span class="toc-number">36.</span> <span class="toc-text">
+          Security recommendations for a VPS</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/me.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Alexandr Sipco</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://www.facebook.com/alexsqnet" target="_blank" rel="noopener" data-popover="social.facebook" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-facebook"></i></span></a><a class="sidebar-ov-social-item" href="https://www.linkedin.com/in/alexandr-sipco-48265b163" target="_blank" rel="noopener" data-popover="social.linkedin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-linkedin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives"><div class="sidebar-ov-state-item__count">12</div><div class="sidebar-ov-state-item__name">Archives</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories"><div class="sidebar-ov-state-item__count">9</div><div class="sidebar-ov-state-item__name">Categories</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags"><div class="sidebar-ov-state-item__count">31</div><div class="sidebar-ov-state-item__name">Tags</div></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2026</span><span class="footer__icon"><i class="fas fa-code"></i></span><span>Alexandr Sipco</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="Search for Posts (Support multiple keywords)"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ Untitled ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', 'Please enter characters');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="/js/utils.js?v=2.8.0"></script><script src="/js/stun-boot.js?v=2.8.0"></script><script src="/js/scroll.js?v=2.8.0"></script><script src="/js/header.js?v=2.8.0"></script><script src="/js/sidebar.js?v=2.8.0"></script><script type="application/json" src="/search.xml"></script></body></html>

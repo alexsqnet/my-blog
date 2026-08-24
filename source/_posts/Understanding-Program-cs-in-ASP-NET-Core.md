@@ -4,10 +4,7 @@ date: 2024-05-20 20:54:44
 tags: [asp.net core, c#, .net]
 category: [".net"]
 
-thumbnail: uploads/Understanding-Program-cs-in-ASP-NET-Core/cover.png
-banner: uploads/Understanding-Program-cs-in-ASP-NET-Core/cover.png
 ---
-![Alt Text](uploads/Understanding-Program-cs-in-ASP-NET-Core/cover.png)
 
 When you start learning **ASP.NET Core**, the `Program.cs` file can feel overwhelming.  
 So many methods, so many configurations — authentication, middleware, services, pipelines…

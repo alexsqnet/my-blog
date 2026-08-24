@@ -24,7 +24,8 @@ section.postlist
         if !post.link && isExcerpt
           div.post-readmore
             a.post-readmore__link(href=url_for(post.path))
-              span.post-readmore__text= __('post.read_more')
               span.post-readmore__icon
                 i(class=theme.icon.read_more_btn)
+              span.post-readmore__text= __('post.read_more')
+
   - })

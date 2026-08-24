@@ -1618,9 +1618,6 @@ kbd {
 .post-meta-item--createtime {
   color: var(--color-gray-700);
 }
-.post-meta-item--updatetime {
-  color: #49b1f5;
-}
 .post-meta-item--visitors {
   color: #fc6423;
 }
@@ -2796,4 +2793,10 @@ body {
   .header-banner-info__title {
     font-size: 1.4rem;
   }
+}
+.post-readmore {
+  text-align: right;
+}
+.post-readmore__icon {
+  margin-right: 4px;
 }

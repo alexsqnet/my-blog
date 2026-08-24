@@ -6,10 +6,8 @@ tags:
 category:
     - design pattern
 
-thumbnail: uploads/facade-design-pattern/cover.png
-banner: uploads/facade-design-pattern/cover.png
 ---
-![Alt Text](uploads/facade-design-pattern/cover.png)
+
 # What is the Facade Design Pattern?
 **The Facade design pattern** is a structural pattern that provides a simplified interface to a complex system of classes, libraries, or frameworks. It hides the complexities of the system and makes it easier to use by providing a unified, high-level interface.
 

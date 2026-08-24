@@ -7,10 +7,9 @@ tags:
 category:
     - unit testing
 
-thumbnail: uploads/leaking-domain-knowledge-antipattern/cover.png
-banner: uploads/leaking-domain-knowledge-antipattern/cover.png
+
 ---
-![Alt Text](uploads/leaking-domain-knowledge-antipattern/cover.png)
+
 Leaking domain knowledge to tests is an anti-pattern in software development and testing. It occurs when the test code contains information about the implementation details of the system under test (SUT) rather than focusing on its behavior and expected outcomes. This can lead to a number of issues that undermine the effectiveness and maintainability of the tests.
 
 <!--more-->

@@ -1,0 +1,981 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/uploads/favicon_io/favicon-16x16.png?v=2.8.0" type="image/png" sizes="16x16"><link rel="icon" href="/uploads/favicon_io/favicon-32x32.png?v=2.8.0" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/uploads/favicon_io/apple-touch-icon.png?v=2.8.0" sizes="180x180"><meta name="description" content="This guide contains common Docker commands and practical examples useful for managing Docker on a Linux server or VPS.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker - Basic Administration Guide">
+<meta property="og:url" content="https://alexsipco.net/2026/06/20/docker-basic-administration-guide/index.html">
+<meta property="og:site_name" content="Alexandr Sipco - Software Developer&#39;s handbook">
+<meta property="og:description" content="This guide contains common Docker commands and practical examples useful for managing Docker on a Linux server or VPS.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-20T20:36:52.000Z">
+<meta property="article:modified_time" content="2026-08-24T20:44:19.545Z">
+<meta property="article:author" content="Alexandr Sipco">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="cli">
+<meta name="twitter:card" content="summary"><title>Docker - Basic Administration Guide | Alexandr Sipco - Software Developer's handbook</title><link ref="canonical" href="https://alexsipco.net/2026/06/20/docker-basic-administration-guide/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.8.0"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">Categories</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">Tags</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/projects"><span class="header-nav-menu-item__icon"><i class="fas fa-briefcase"></i></span><span class="header-nav-menu-item__text">My Projects</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about"><span class="header-nav-menu-item__icon"><i class="fas fa-address-card"></i></span><span class="header-nav-menu-item__text">About</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">Search</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">My Developer Handbook</div><div class="header-banner-info__subtitle">Programming is the art of telling another human being what one wants the computer to do.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Docker - Basic Administration Guide</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2026-06-20</span></span></div></header><div class="post-body"><p>This guide contains common Docker commands and practical examples useful for managing Docker on a Linux server or VPS.</p>
+<span id="more"></span>
+
+
+        <h2 id="1-Check-whether-Docker-is-installed"   >
+          <a href="#1-Check-whether-Docker-is-installed" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-Check-whether-Docker-is-installed" class="headerlink" title="1. Check whether Docker is installed"></a>1. Check whether Docker is installed</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker --version</span><br></pre></td></tr></table></div></figure>
+
+<p>Check Docker Compose:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose version</span><br></pre></td></tr></table></div></figure>
+
+<p>Check Docker service status:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status docker</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="2-Install-Docker-on-Ubuntu"   >
+          <a href="#2-Install-Docker-on-Ubuntu" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-Install-Docker-on-Ubuntu" class="headerlink" title="2. Install Docker on Ubuntu"></a>2. Install Docker on Ubuntu</h2>
+      <p>Update packages:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt upgrade -y</span><br></pre></td></tr></table></div></figure>
+
+<p>Install required packages:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y ca-certificates curl</span><br></pre></td></tr></table></div></figure>
+
+<p>Create the Docker keyring directory:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo install -m 0755 -d /etc/apt/keyrings</span><br></pre></td></tr></table></div></figure>
+
+<p>Download Docker’s official GPG key:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc</span><br></pre></td></tr></table></div></figure>
+
+<p>Set permissions:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chmod</span> a+r /etc/apt/keyrings/docker.asc</span><br></pre></td></tr></table></div></figure>
+
+<p>Add the Docker repository:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span>   <span class="string">&quot;deb [arch=<span class="subst">$(dpkg --print-architecture)</span> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu   <span class="subst">$(. /etc/os-release &amp;&amp; echo <span class="string">&quot;<span class="variable">$&#123;UBUNTU_CODENAME:-<span class="variable">$VERSION_CODENAME</span>&#125;</span>&quot;</span>)</span> stable&quot;</span> |   sudo <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br></pre></td></tr></table></div></figure>
+
+<p>Update package information:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br></pre></td></tr></table></div></figure>
+
+<p>Install Docker Engine and Docker Compose:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></div></figure>
+
+<p>Test Docker:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run hello-world</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="3-Start-stop-and-enable-Docker"   >
+          <a href="#3-Start-stop-and-enable-Docker" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-Start-stop-and-enable-Docker" class="headerlink" title="3. Start, stop, and enable Docker"></a>3. Start, stop, and enable Docker</h2>
+      <p>Start Docker:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start docker</span><br></pre></td></tr></table></div></figure>
+
+<p>Stop Docker:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl stop docker</span><br></pre></td></tr></table></div></figure>
+
+<p>Restart Docker:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></div></figure>
+
+<p>Enable Docker at boot:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></div></figure>
+
+<p>Check status:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status docker</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="4-Run-Docker-without-sudo"   >
+          <a href="#4-Run-Docker-without-sudo" class="heading-link"><i class="fas fa-link"></i></a><a href="#4-Run-Docker-without-sudo" class="headerlink" title="4. Run Docker without sudo"></a>4. Run Docker without sudo</h2>
+      <p>Add your current user to the <code>docker</code> group:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker <span class="variable">$USER</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Then log out and log back in.</p>
+<p>Check membership:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">groups</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Test:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>Membership in the <code>docker</code> group effectively grants root-level privileges on the host. Only trusted users should be added to this group.</p>
+</blockquote>
+<hr>
+
+        <h2 id="5-List-containers"   >
+          <a href="#5-List-containers" class="heading-link"><i class="fas fa-link"></i></a><a href="#5-List-containers" class="headerlink" title="5. List containers"></a>5. List containers</h2>
+      <p>Show running containers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></div></figure>
+
+<p>Show all containers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></div></figure>
+
+<p>Alternative syntax:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container <span class="built_in">ls</span></span><br></pre></td></tr></table></div></figure>
+
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container <span class="built_in">ls</span> -a</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="6-Run-a-container"   >
+          <a href="#6-Run-a-container" class="heading-link"><i class="fas fa-link"></i></a><a href="#6-Run-a-container" class="headerlink" title="6. Run a container"></a>6. Run a container</h2>
+      <p>Run Nginx:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Run in detached mode:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Run with a custom name:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name web nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Expose a port:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name web -p 8080:80 nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>This maps:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">host port 8080 -&gt; container port 80</span><br></pre></td></tr></table></div></figure>
+
+<p>Open:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://SERVER_IP:8080</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="7-Start-stop-restart-and-remove-containers"   >
+          <a href="#7-Start-stop-restart-and-remove-containers" class="heading-link"><i class="fas fa-link"></i></a><a href="#7-Start-stop-restart-and-remove-containers" class="headerlink" title="7. Start, stop, restart, and remove containers"></a>7. Start, stop, restart, and remove containers</h2>
+      <p>Stop a container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop web</span><br></pre></td></tr></table></div></figure>
+
+<p>Start it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start web</span><br></pre></td></tr></table></div></figure>
+
+<p>Restart it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart web</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> web</span><br></pre></td></tr></table></div></figure>
+
+<p>Force-remove a running container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> -f web</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="8-View-container-logs"   >
+          <a href="#8-View-container-logs" class="heading-link"><i class="fas fa-link"></i></a><a href="#8-View-container-logs" class="headerlink" title="8. View container logs"></a>8. View container logs</h2>
+      <p>Show logs:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs web</span><br></pre></td></tr></table></div></figure>
+
+<p>Follow logs:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs -f web</span><br></pre></td></tr></table></div></figure>
+
+<p>Show the last 100 lines:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs --<span class="built_in">tail</span> 100 web</span><br></pre></td></tr></table></div></figure>
+
+<p>Show timestamps:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs -t web</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="9-Execute-commands-inside-a-container"   >
+          <a href="#9-Execute-commands-inside-a-container" class="heading-link"><i class="fas fa-link"></i></a><a href="#9-Execute-commands-inside-a-container" class="headerlink" title="9. Execute commands inside a container"></a>9. Execute commands inside a container</h2>
+      <p>Open a shell:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it web bash</span><br></pre></td></tr></table></div></figure>
+
+<p>If Bash is not available:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it web sh</span><br></pre></td></tr></table></div></figure>
+
+<p>Run a single command:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> web <span class="built_in">ls</span> -la</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="10-Inspect-a-container"   >
+          <a href="#10-Inspect-a-container" class="heading-link"><i class="fas fa-link"></i></a><a href="#10-Inspect-a-container" class="headerlink" title="10. Inspect a container"></a>10. Inspect a container</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect web</span><br></pre></td></tr></table></div></figure>
+
+<p>Get the container IP:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect -f <span class="string">&#x27;&#123;&#123;range.NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;&#x27;</span> web</span><br></pre></td></tr></table></div></figure>
+
+<p>Show container resource usage:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stats</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="11-List-Docker-images"   >
+          <a href="#11-List-Docker-images" class="heading-link"><i class="fas fa-link"></i></a><a href="#11-List-Docker-images" class="headerlink" title="11. List Docker images"></a>11. List Docker images</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></div></figure>
+
+<p>Alternative:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image <span class="built_in">ls</span></span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="12-Pull-an-image"   >
+          <a href="#12-Pull-an-image" class="heading-link"><i class="fas fa-link"></i></a><a href="#12-Pull-an-image" class="headerlink" title="12. Pull an image"></a>12. Pull an image</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Specific version:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nginx:1.27</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="13-Remove-Docker-images"   >
+          <a href="#13-Remove-Docker-images" class="heading-link"><i class="fas fa-link"></i></a><a href="#13-Remove-Docker-images" class="headerlink" title="13. Remove Docker images"></a>13. Remove Docker images</h2>
+      <p>Remove an image:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Force removal:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi -f nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove dangling images:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image prune</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="14-Build-an-image"   >
+          <a href="#14-Build-an-image" class="heading-link"><i class="fas fa-link"></i></a><a href="#14-Build-an-image" class="headerlink" title="14. Build an image"></a>14. Build an image</h2>
+      <p>From a directory containing a <code>Dockerfile</code>:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t myapp .</span><br></pre></td></tr></table></div></figure>
+
+<p>With a version tag:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t myapp:1.0.0 .</span><br></pre></td></tr></table></div></figure>
+
+<p>List images afterward:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="15-Tag-an-image"   >
+          <a href="#15-Tag-an-image" class="heading-link"><i class="fas fa-link"></i></a><a href="#15-Tag-an-image" class="headerlink" title="15. Tag an image"></a>15. Tag an image</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag myapp:1.0.0 username/myapp:1.0.0</span><br></pre></td></tr></table></div></figure>
+
+<p>Example for a registry:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag myapp:1.0.0 registry.example.com/myapp:1.0.0</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="16-Docker-login-and-logout"   >
+          <a href="#16-Docker-login-and-logout" class="heading-link"><i class="fas fa-link"></i></a><a href="#16-Docker-login-and-logout" class="headerlink" title="16. Docker login and logout"></a>16. Docker login and logout</h2>
+      <p>Login to a container registry:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></div></figure>
+
+<p>Login to a specific registry:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login registry.example.com</span><br></pre></td></tr></table></div></figure>
+
+<p>Logout:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">logout</span></span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="17-Push-an-image"   >
+          <a href="#17-Push-an-image" class="heading-link"><i class="fas fa-link"></i></a><a href="#17-Push-an-image" class="headerlink" title="17. Push an image"></a>17. Push an image</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push username/myapp:1.0.0</span><br></pre></td></tr></table></div></figure>
+
+<p>Or:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push registry.example.com/myapp:1.0.0</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="18-Environment-variables"   >
+          <a href="#18-Environment-variables" class="heading-link"><i class="fas fa-link"></i></a><a href="#18-Environment-variables" class="headerlink" title="18. Environment variables"></a>18. Environment variables</h2>
+      <p>Pass an environment variable:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -e APP_ENV=production myapp</span><br></pre></td></tr></table></div></figure>
+
+<p>Multiple variables:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run   -e APP_ENV=production   -e PORT=8080   myapp</span><br></pre></td></tr></table></div></figure>
+
+<p>Load variables from a file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --env-file .<span class="built_in">env</span> myapp</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>Do not commit production secrets, passwords, API keys, or tokens to Git.</p>
+</blockquote>
+<hr>
+
+        <h2 id="19-Volumes"   >
+          <a href="#19-Volumes" class="heading-link"><i class="fas fa-link"></i></a><a href="#19-Volumes" class="headerlink" title="19. Volumes"></a>19. Volumes</h2>
+      <p>List volumes:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume <span class="built_in">ls</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Create a volume:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume create app-data</span><br></pre></td></tr></table></div></figure>
+
+<p>Inspect it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume inspect app-data</span><br></pre></td></tr></table></div></figure>
+
+<p>Use it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d   --name app   -v app-data:/data   myapp</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume <span class="built_in">rm</span> app-data</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove unused volumes:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume prune</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="20-Bind-mounts"   >
+          <a href="#20-Bind-mounts" class="heading-link"><i class="fas fa-link"></i></a><a href="#20-Bind-mounts" class="headerlink" title="20. Bind mounts"></a>20. Bind mounts</h2>
+      <p>Mount a host directory inside a container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d   --name web   -v /opt/app/data:/app/data   myapp</span><br></pre></td></tr></table></div></figure>
+
+<p>Modern syntax:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d   --mount <span class="built_in">type</span>=<span class="built_in">bind</span>,<span class="built_in">source</span>=/opt/app/data,target=/app/data   myapp</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="21-Docker-networks"   >
+          <a href="#21-Docker-networks" class="heading-link"><i class="fas fa-link"></i></a><a href="#21-Docker-networks" class="headerlink" title="21. Docker networks"></a>21. Docker networks</h2>
+      <p>List networks:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network <span class="built_in">ls</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Create a network:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create app-network</span><br></pre></td></tr></table></div></figure>
+
+<p>Run a container on that network:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d   --name api   --network app-network   myapi</span><br></pre></td></tr></table></div></figure>
+
+<p>Connect an existing container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network connect app-network web</span><br></pre></td></tr></table></div></figure>
+
+<p>Disconnect:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network disconnect app-network web</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove a network:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network <span class="built_in">rm</span> app-network</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="22-Container-DNS-between-services"   >
+          <a href="#22-Container-DNS-between-services" class="heading-link"><i class="fas fa-link"></i></a><a href="#22-Container-DNS-between-services" class="headerlink" title="22. Container DNS between services"></a>22. Container DNS between services</h2>
+      <p>Containers on the same user-defined Docker network can communicate using container names.</p>
+<p>Example:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api -&gt; postgres:5432</span><br></pre></td></tr></table></div></figure>
+
+<p>Instead of:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">api -&gt; localhost:5432</span><br></pre></td></tr></table></div></figure>
+
+<p>Inside a container, <code>localhost</code> refers to that container itself.</p>
+<hr>
+
+        <h2 id="23-Restart-policies"   >
+          <a href="#23-Restart-policies" class="heading-link"><i class="fas fa-link"></i></a><a href="#23-Restart-policies" class="headerlink" title="23. Restart policies"></a>23. Restart policies</h2>
+      <p>Automatically restart a container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d   --restart unless-stopped   --name web   nginx</span><br></pre></td></tr></table></div></figure>
+
+<p>Common policies:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">no</span><br><span class="line">always</span><br><span class="line">unless-stopped</span><br><span class="line">on-failure</span><br></pre></td></tr></table></div></figure>
+
+<p>For long-running VPS services, this is commonly useful:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unless-stopped</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="24-Docker-Compose-basics"   >
+          <a href="#24-Docker-Compose-basics" class="heading-link"><i class="fas fa-link"></i></a><a href="#24-Docker-Compose-basics" class="headerlink" title="24. Docker Compose basics"></a>24. Docker Compose basics</h2>
+      <p>Example <code>compose.yaml</code>:</p>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Start services:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up</span><br></pre></td></tr></table></div></figure>
+
+<p>Start in background:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></div></figure>
+
+<p>Stop and remove containers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose down</span><br></pre></td></tr></table></div></figure>
+
+<p>Restart:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose restart</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="25-Docker-Compose-build"   >
+          <a href="#25-Docker-Compose-build" class="heading-link"><i class="fas fa-link"></i></a><a href="#25-Docker-Compose-build" class="headerlink" title="25. Docker Compose build"></a>25. Docker Compose build</h2>
+      <p>Build services:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose build</span><br></pre></td></tr></table></div></figure>
+
+<p>Build without cache:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose build --no-cache</span><br></pre></td></tr></table></div></figure>
+
+<p>Build and start:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d --build</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="26-Docker-Compose-status"   >
+          <a href="#26-Docker-Compose-status" class="heading-link"><i class="fas fa-link"></i></a><a href="#26-Docker-Compose-status" class="headerlink" title="26. Docker Compose status"></a>26. Docker Compose status</h2>
+      <p>List services:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></div></figure>
+
+<p>Show logs:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose logs</span><br></pre></td></tr></table></div></figure>
+
+<p>Follow logs:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose logs -f</span><br></pre></td></tr></table></div></figure>
+
+<p>Follow logs for one service:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose logs -f api</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="27-Docker-Compose-pull-and-update"   >
+          <a href="#27-Docker-Compose-pull-and-update" class="heading-link"><i class="fas fa-link"></i></a><a href="#27-Docker-Compose-pull-and-update" class="headerlink" title="27. Docker Compose pull and update"></a>27. Docker Compose pull and update</h2>
+      <p>Pull newer images:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose pull</span><br></pre></td></tr></table></div></figure>
+
+<p>Recreate services:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></div></figure>
+
+<p>Typical update workflow:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker compose pull</span><br><span class="line">docker compose up -d</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="28-Docker-Compose-environment-file"   >
+          <a href="#28-Docker-Compose-environment-file" class="heading-link"><i class="fas fa-link"></i></a><a href="#28-Docker-Compose-environment-file" class="headerlink" title="28. Docker Compose environment file"></a>28. Docker Compose environment file</h2>
+      <p>Example <code>.env</code>:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">APP_ENV=production</span><br><span class="line">POSTGRES_DB=appdb</span><br><span class="line">POSTGRES_USER=appuser</span><br></pre></td></tr></table></div></figure>
+
+<p>Example Compose usage:</p>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">myapi</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">APP_ENV:</span> <span class="string">$&#123;APP_ENV&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:17</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_DB:</span> <span class="string">$&#123;POSTGRES_DB&#125;</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">$&#123;POSTGRES_USER&#125;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Keep secret <code>.env</code> files out of Git.</p>
+<p>Example <code>.gitignore</code>:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.env</span><br><span class="line">.env.production</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="29-View-Docker-disk-usage"   >
+          <a href="#29-View-Docker-disk-usage" class="heading-link"><i class="fas fa-link"></i></a><a href="#29-View-Docker-disk-usage" class="headerlink" title="29. View Docker disk usage"></a>29. View Docker disk usage</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system <span class="built_in">df</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Detailed view:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system <span class="built_in">df</span> -v</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="30-Clean-unused-Docker-resources"   >
+          <a href="#30-Clean-unused-Docker-resources" class="heading-link"><i class="fas fa-link"></i></a><a href="#30-Clean-unused-Docker-resources" class="headerlink" title="30. Clean unused Docker resources"></a>30. Clean unused Docker resources</h2>
+      <p>Remove stopped containers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container prune</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove unused images:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image prune</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove unused networks:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network prune</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove unused volumes:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume prune</span><br></pre></td></tr></table></div></figure>
+
+<p>Remove most unused Docker resources:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system prune</span><br></pre></td></tr></table></div></figure>
+
+<p>Also remove unused images not referenced by containers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system prune -a</span><br></pre></td></tr></table></div></figure>
+
+<blockquote>
+<p>Be careful with cleanup commands on production servers.</p>
+</blockquote>
+<hr>
+
+        <h2 id="31-Check-container-resource-usage"   >
+          <a href="#31-Check-container-resource-usage" class="heading-link"><i class="fas fa-link"></i></a><a href="#31-Check-container-resource-usage" class="headerlink" title="31. Check container resource usage"></a>31. Check container resource usage</h2>
+      <p>Live CPU and memory usage:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stats</span><br></pre></td></tr></table></div></figure>
+
+<p>For a single container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stats web</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="32-Copy-files-between-host-and-container"   >
+          <a href="#32-Copy-files-between-host-and-container" class="heading-link"><i class="fas fa-link"></i></a><a href="#32-Copy-files-between-host-and-container" class="headerlink" title="32. Copy files between host and container"></a>32. Copy files between host and container</h2>
+      <p>Copy from host to container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">cp</span> file.txt web:/tmp/file.txt</span><br></pre></td></tr></table></div></figure>
+
+<p>Copy from container to host:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">cp</span> web:/tmp/file.txt ./file.txt</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="33-Check-a-container’s-ports"   >
+          <a href="#33-Check-a-container’s-ports" class="heading-link"><i class="fas fa-link"></i></a><a href="#33-Check-a-container’s-ports" class="headerlink" title="33. Check a container’s ports"></a>33. Check a container’s ports</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker port web</span><br></pre></td></tr></table></div></figure>
+
+<p>Or:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="34-Check-container-processes"   >
+          <a href="#34-Check-container-processes" class="heading-link"><i class="fas fa-link"></i></a><a href="#34-Check-container-processes" class="headerlink" title="34. Check container processes"></a>34. Check container processes</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker top web</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="35-Rename-a-container"   >
+          <a href="#35-Rename-a-container" class="heading-link"><i class="fas fa-link"></i></a><a href="#35-Rename-a-container" class="headerlink" title="35. Rename a container"></a>35. Rename a container</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rename old-name new-name</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="36-Health-checks"   >
+          <a href="#36-Health-checks" class="heading-link"><i class="fas fa-link"></i></a><a href="#36-Health-checks" class="headerlink" title="36. Health checks"></a>36. Health checks</h2>
+      <p>Check container health:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect --format=<span class="string">&#x27;&#123;&#123;json .State.Health&#125;&#125;&#x27;</span> container-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Example Compose health check:</p>
+<figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">healthcheck:</span></span><br><span class="line">      <span class="attr">test:</span> [<span class="string">&quot;CMD&quot;</span>, <span class="string">&quot;curl&quot;</span>, <span class="string">&quot;-f&quot;</span>, <span class="string">&quot;http://localhost&quot;</span>]</span><br><span class="line">      <span class="attr">interval:</span> <span class="string">30s</span></span><br><span class="line">      <span class="attr">timeout:</span> <span class="string">5s</span></span><br><span class="line">      <span class="attr">retries:</span> <span class="number">3</span></span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="37-View-Docker-events"   >
+          <a href="#37-View-Docker-events" class="heading-link"><i class="fas fa-link"></i></a><a href="#37-View-Docker-events" class="headerlink" title="37. View Docker events"></a>37. View Docker events</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker events</span><br></pre></td></tr></table></div></figure>
+
+<p>Useful for debugging container starts, stops, restarts, and network events.</p>
+<hr>
+
+        <h2 id="38-Docker-daemon-logs"   >
+          <a href="#38-Docker-daemon-logs" class="heading-link"><i class="fas fa-link"></i></a><a href="#38-Docker-daemon-logs" class="headerlink" title="38. Docker daemon logs"></a>38. Docker daemon logs</h2>
+      <p>Check Docker service logs:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo journalctl -u docker</span><br></pre></td></tr></table></div></figure>
+
+<p>Follow them:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo journalctl -u docker -f</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="39-Common-troubleshooting-commands"   >
+          <a href="#39-Common-troubleshooting-commands" class="heading-link"><i class="fas fa-link"></i></a><a href="#39-Common-troubleshooting-commands" class="headerlink" title="39. Common troubleshooting commands"></a>39. Common troubleshooting commands</h2>
+      <p>Check running containers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></div></figure>
+
+<p>Check stopped containers:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></div></figure>
+
+<p>Check logs:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker logs container-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Inspect container:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect container-name</span><br></pre></td></tr></table></div></figure>
+
+<p>Check networks:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network <span class="built_in">ls</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Check ports:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ss -tulpn</span><br></pre></td></tr></table></div></figure>
+
+<p>Check Docker disk usage:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system <span class="built_in">df</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Check daemon status:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status docker</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="40-Example-production-directory-structure"   >
+          <a href="#40-Example-production-directory-structure" class="heading-link"><i class="fas fa-link"></i></a><a href="#40-Example-production-directory-structure" class="headerlink" title="40. Example production directory structure"></a>40. Example production directory structure</h2>
+      <p>A simple application deployment directory can look like:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/opt/app</span><br><span class="line">├── compose.yaml</span><br><span class="line">├── .env</span><br><span class="line">├── config/</span><br><span class="line">├── data/</span><br><span class="line">└── backups/</span><br></pre></td></tr></table></div></figure>
+
+<p>Recommended ownership:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chown</span> -R deployuser:deployuser /opt/app</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="41-Example-multi-service-Compose-file"   >
+          <a href="#41-Example-multi-service-Compose-file" class="heading-link"><i class="fas fa-link"></i></a><a href="#41-Example-multi-service-Compose-file" class="headerlink" title="41. Example multi-service Compose file"></a>41. Example multi-service Compose file</h2>
+      <figure class="highlight yaml"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">registry.example.com/api:latest</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">env_file:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">.env</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">internal</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">registry.example.com/web:latest</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">internal</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:17</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_DB:</span> <span class="string">$&#123;POSTGRES_DB&#125;</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">$&#123;POSTGRES_USER&#125;</span></span><br><span class="line">      <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">$&#123;POSTGRES_PASSWORD&#125;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres-data:/var/lib/postgresql/data</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">internal</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">internal:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">postgres-data:</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Start it:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></div></figure>
+
+<p>Check status:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose ps</span><br></pre></td></tr></table></div></figure>
+
+<p>Follow logs:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose logs -f</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="42-Update-a-Dockerized-application"   >
+          <a href="#42-Update-a-Dockerized-application" class="heading-link"><i class="fas fa-link"></i></a><a href="#42-Update-a-Dockerized-application" class="headerlink" title="42. Update a Dockerized application"></a>42. Update a Dockerized application</h2>
+      <p>A common deployment flow:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/app</span><br><span class="line">docker compose pull</span><br><span class="line">docker compose up -d</span><br><span class="line">docker image prune</span><br></pre></td></tr></table></div></figure>
+
+<p>If images are built locally:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/app</span><br><span class="line">docker compose up -d --build</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="43-Backup-a-Docker-volume"   >
+          <a href="#43-Backup-a-Docker-volume" class="heading-link"><i class="fas fa-link"></i></a><a href="#43-Backup-a-Docker-volume" class="headerlink" title="43. Backup a Docker volume"></a>43. Backup a Docker volume</h2>
+      <p>One simple approach:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --<span class="built_in">rm</span>   -v app-data:/data   -v $(<span class="built_in">pwd</span>):/backup   alpine   tar czf /backup/app-data-backup.tar.gz -C /data .</span><br></pre></td></tr></table></div></figure>
+
+<p>Restore:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --<span class="built_in">rm</span>   -v app-data:/data   -v $(<span class="built_in">pwd</span>):/backup   alpine   tar xzf /backup/app-data-backup.tar.gz -C /data</span><br></pre></td></tr></table></div></figure>
+
+<p>For databases such as PostgreSQL, prefer database-aware backup tools such as <code>pg_dump</code>.</p>
+<hr>
+
+        <h2 id="44-Useful-commands-cheat-sheet"   >
+          <a href="#44-Useful-commands-cheat-sheet" class="heading-link"><i class="fas fa-link"></i></a><a href="#44-Useful-commands-cheat-sheet" class="headerlink" title="44. Useful commands cheat sheet"></a>44. Useful commands cheat sheet</h2>
+      <figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">docker ps -a</span><br><span class="line">docker images</span><br><span class="line">docker logs -f container-name</span><br><span class="line">docker <span class="built_in">exec</span> -it container-name bash</span><br><span class="line">docker inspect container-name</span><br><span class="line">docker stats</span><br><span class="line">docker network <span class="built_in">ls</span></span><br><span class="line">docker volume <span class="built_in">ls</span></span><br><span class="line">docker system <span class="built_in">df</span></span><br><span class="line">docker compose ps</span><br><span class="line">docker compose logs -f</span><br><span class="line">docker compose pull</span><br><span class="line">docker compose up -d</span><br><span class="line">docker compose up -d --build</span><br><span class="line">docker compose down</span><br></pre></td></tr></table></div></figure>
+
+<hr>
+
+        <h2 id="Security-recommendations"   >
+          <a href="#Security-recommendations" class="heading-link"><i class="fas fa-link"></i></a><a href="#Security-recommendations" class="headerlink" title="Security recommendations"></a>Security recommendations</h2>
+      <p>For Docker on a public VPS:</p>
+<ul>
+<li>do not expose database ports publicly unless necessary;</li>
+<li>expose only required ports;</li>
+<li>use a firewall such as UFW;</li>
+<li>avoid running containers as <code>root</code> when possible;</li>
+<li>do not mount the Docker socket into containers unless absolutely necessary;</li>
+<li>keep Docker and the host OS updated;</li>
+<li>use specific image versions instead of relying on <code>latest</code> for production;</li>
+<li>keep secrets outside Git;</li>
+<li>use read-only mounts where possible;</li>
+<li>configure restart policies;</li>
+<li>back up persistent volumes and databases;</li>
+<li>periodically review unused images, containers, networks, and volumes;</li>
+<li>only add trusted users to the <code>docker</code> group.</li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/linux/">linux</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/docker/">docker</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/cli/">cli</a></span></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2026/07/14/basic-linux-administration-guide/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">Basic Linux Administration Guide</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2025/12/24/dotnet-cli-cheatsheet/"><span class="paginator-prev__text">.NET CLI cheatsheet</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Check-whether-Docker-is-installed"><span class="toc-number">1.</span> <span class="toc-text">
+          1. Check whether Docker is installed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Install-Docker-on-Ubuntu"><span class="toc-number">2.</span> <span class="toc-text">
+          2. Install Docker on Ubuntu</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Start-stop-and-enable-Docker"><span class="toc-number">3.</span> <span class="toc-text">
+          3. Start, stop, and enable Docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Run-Docker-without-sudo"><span class="toc-number">4.</span> <span class="toc-text">
+          4. Run Docker without sudo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-List-containers"><span class="toc-number">5.</span> <span class="toc-text">
+          5. List containers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Run-a-container"><span class="toc-number">6.</span> <span class="toc-text">
+          6. Run a container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Start-stop-restart-and-remove-containers"><span class="toc-number">7.</span> <span class="toc-text">
+          7. Start, stop, restart, and remove containers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-View-container-logs"><span class="toc-number">8.</span> <span class="toc-text">
+          8. View container logs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Execute-commands-inside-a-container"><span class="toc-number">9.</span> <span class="toc-text">
+          9. Execute commands inside a container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-Inspect-a-container"><span class="toc-number">10.</span> <span class="toc-text">
+          10. Inspect a container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-List-Docker-images"><span class="toc-number">11.</span> <span class="toc-text">
+          11. List Docker images</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-Pull-an-image"><span class="toc-number">12.</span> <span class="toc-text">
+          12. Pull an image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-Remove-Docker-images"><span class="toc-number">13.</span> <span class="toc-text">
+          13. Remove Docker images</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-Build-an-image"><span class="toc-number">14.</span> <span class="toc-text">
+          14. Build an image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-Tag-an-image"><span class="toc-number">15.</span> <span class="toc-text">
+          15. Tag an image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-Docker-login-and-logout"><span class="toc-number">16.</span> <span class="toc-text">
+          16. Docker login and logout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#17-Push-an-image"><span class="toc-number">17.</span> <span class="toc-text">
+          17. Push an image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18-Environment-variables"><span class="toc-number">18.</span> <span class="toc-text">
+          18. Environment variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#19-Volumes"><span class="toc-number">19.</span> <span class="toc-text">
+          19. Volumes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#20-Bind-mounts"><span class="toc-number">20.</span> <span class="toc-text">
+          20. Bind mounts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-Docker-networks"><span class="toc-number">21.</span> <span class="toc-text">
+          21. Docker networks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-Container-DNS-between-services"><span class="toc-number">22.</span> <span class="toc-text">
+          22. Container DNS between services</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#23-Restart-policies"><span class="toc-number">23.</span> <span class="toc-text">
+          23. Restart policies</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#24-Docker-Compose-basics"><span class="toc-number">24.</span> <span class="toc-text">
+          24. Docker Compose basics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#25-Docker-Compose-build"><span class="toc-number">25.</span> <span class="toc-text">
+          25. Docker Compose build</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#26-Docker-Compose-status"><span class="toc-number">26.</span> <span class="toc-text">
+          26. Docker Compose status</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#27-Docker-Compose-pull-and-update"><span class="toc-number">27.</span> <span class="toc-text">
+          27. Docker Compose pull and update</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#28-Docker-Compose-environment-file"><span class="toc-number">28.</span> <span class="toc-text">
+          28. Docker Compose environment file</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#29-View-Docker-disk-usage"><span class="toc-number">29.</span> <span class="toc-text">
+          29. View Docker disk usage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#30-Clean-unused-Docker-resources"><span class="toc-number">30.</span> <span class="toc-text">
+          30. Clean unused Docker resources</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#31-Check-container-resource-usage"><span class="toc-number">31.</span> <span class="toc-text">
+          31. Check container resource usage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-Copy-files-between-host-and-container"><span class="toc-number">32.</span> <span class="toc-text">
+          32. Copy files between host and container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#33-Check-a-container%E2%80%99s-ports"><span class="toc-number">33.</span> <span class="toc-text">
+          33. Check a container’s ports</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#34-Check-container-processes"><span class="toc-number">34.</span> <span class="toc-text">
+          34. Check container processes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#35-Rename-a-container"><span class="toc-number">35.</span> <span class="toc-text">
+          35. Rename a container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#36-Health-checks"><span class="toc-number">36.</span> <span class="toc-text">
+          36. Health checks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#37-View-Docker-events"><span class="toc-number">37.</span> <span class="toc-text">
+          37. View Docker events</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#38-Docker-daemon-logs"><span class="toc-number">38.</span> <span class="toc-text">
+          38. Docker daemon logs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#39-Common-troubleshooting-commands"><span class="toc-number">39.</span> <span class="toc-text">
+          39. Common troubleshooting commands</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#40-Example-production-directory-structure"><span class="toc-number">40.</span> <span class="toc-text">
+          40. Example production directory structure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#41-Example-multi-service-Compose-file"><span class="toc-number">41.</span> <span class="toc-text">
+          41. Example multi-service Compose file</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-Update-a-Dockerized-application"><span class="toc-number">42.</span> <span class="toc-text">
+          42. Update a Dockerized application</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#43-Backup-a-Docker-volume"><span class="toc-number">43.</span> <span class="toc-text">
+          43. Backup a Docker volume</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#44-Useful-commands-cheat-sheet"><span class="toc-number">44.</span> <span class="toc-text">
+          44. Useful commands cheat sheet</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security-recommendations"><span class="toc-number">45.</span> <span class="toc-text">
+          Security recommendations</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/me.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Alexandr Sipco</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://www.facebook.com/alexsqnet" target="_blank" rel="noopener" data-popover="social.facebook" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-facebook"></i></span></a><a class="sidebar-ov-social-item" href="https://www.linkedin.com/in/alexandr-sipco-48265b163" target="_blank" rel="noopener" data-popover="social.linkedin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-linkedin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives"><div class="sidebar-ov-state-item__count">12</div><div class="sidebar-ov-state-item__name">Archives</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories"><div class="sidebar-ov-state-item__count">9</div><div class="sidebar-ov-state-item__name">Categories</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags"><div class="sidebar-ov-state-item__count">31</div><div class="sidebar-ov-state-item__name">Tags</div></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2026</span><span class="footer__icon"><i class="fas fa-code"></i></span><span>Alexandr Sipco</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="Search for Posts (Support multiple keywords)"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ Untitled ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', 'Please enter characters');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="/js/utils.js?v=2.8.0"></script><script src="/js/stun-boot.js?v=2.8.0"></script><script src="/js/scroll.js?v=2.8.0"></script><script src="/js/header.js?v=2.8.0"></script><script src="/js/sidebar.js?v=2.8.0"></script><script type="application/json" src="/search.xml"></script></body></html>

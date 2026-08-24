@@ -4,10 +4,7 @@ date: 2023-06-03 23:12:42
 tags: ["audio", "video", "editing", "guide"]
 categories: ["audio engineering"]
 
-thumbnail: uploads/dotnet-launch-settings/cover.png
-banner: uploads/dotnet-launch-settings/cover.png
 ---
-![Alt Text](uploads/how-to-clean-audio-in-video-files/cover.png)
 
 ## How to clean audio in video files?
 

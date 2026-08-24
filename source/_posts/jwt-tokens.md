@@ -4,10 +4,7 @@ date: 2025-03-14 19:55:57
 tags: [web development, authn, authz, token, jwt]
 category: ["web development"]
 
-thumbnail: uploads/jwt-tokens/cover.png
-banner: uploads/jwt-tokens/cover.png
 ---
-![Alt Text](uploads/jwt-tokens/cover.png)
 
 Modern applications are no longer limited to classic server-rendered web pages. Today we build **APIs**, **SPAs** **(Angular, React)**, and **mobile applications**, all of which require a secure and scalable authentication mechanism.
 

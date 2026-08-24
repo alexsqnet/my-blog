@@ -4,10 +4,7 @@ date: 2024-12-21 21:49:35
 tags: [.net, asp.net core, configurations]
 category: [".net"]
 
-thumbnail: uploads/configuration-in-aspnet-core-applications/cover.png
-banner: uploads/configuration-in-aspnet-core-applications/cover.png
 ---
-![Alt Text](uploads/configuration-in-aspnet-core-applications/cover.png)
 
 Configuration is a core part of every ASP.NET Core application.  
 Before comparing `IOptions`, `IOptionsSnapshot`, and `IOptionsMonitor`,  

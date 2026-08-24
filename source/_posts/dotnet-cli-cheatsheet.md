@@ -4,10 +4,7 @@ date: 2025-12-24 23:28:03
 tags: [.net, cli, terminal, cheatsheet]
 category: [".net"]
 
-thumbnail: uploads/dotnet-cli-cheatsheet/cover.png
-banner: uploads/dotnet-cli-cheatsheet/cover.png
 ---
-![Alt Text](uploads/dotnet-cli-cheatsheet/cover.png)
 
 This guide explains the **most important `dotnet` commands**, grouped logically.
 You do **not** need to memorize everything — learn the structure and look up details when needed.

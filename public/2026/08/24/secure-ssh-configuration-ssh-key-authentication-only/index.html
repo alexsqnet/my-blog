@@ -1,0 +1,495 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/uploads/favicon_io/favicon-16x16.png?v=2.8.0" type="image/png" sizes="16x16"><link rel="icon" href="/uploads/favicon_io/favicon-32x32.png?v=2.8.0" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/uploads/favicon_io/apple-touch-icon.png?v=2.8.0" sizes="180x180"><meta name="description" content="This guide shows how to generate an SSH key and configure a Linux server so that SSH authentication is performed only with an SSH key, without allowing login using the user’s password.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Secure SSH Configuration - SSH Key Authentication Only">
+<meta property="og:url" content="https://alexsipco.net/2026/08/24/secure-ssh-configuration-ssh-key-authentication-only/index.html">
+<meta property="og:site_name" content="Alexandr Sipco - Software Developer&#39;s handbook">
+<meta property="og:description" content="This guide shows how to generate an SSH key and configure a Linux server so that SSH authentication is performed only with an SSH key, without allowing login using the user’s password.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-08-24T19:53:01.000Z">
+<meta property="article:modified_time" content="2026-08-24T20:44:25.975Z">
+<meta property="article:author" content="Alexandr Sipco">
+<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="authentication">
+<meta property="article:tag" content="server">
+<meta property="article:tag" content="security">
+<meta name="twitter:card" content="summary"><title>Secure SSH Configuration - SSH Key Authentication Only | Alexandr Sipco - Software Developer's handbook</title><link ref="canonical" href="https://alexsipco.net/2026/08/24/secure-ssh-configuration-ssh-key-authentication-only/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.8.0"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"Copy","copySuccess":"Copy Success","copyError":"Copy Error"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">Home</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">Archives</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">Categories</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">Tags</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/projects"><span class="header-nav-menu-item__icon"><i class="fas fa-briefcase"></i></span><span class="header-nav-menu-item__text">My Projects</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about"><span class="header-nav-menu-item__icon"><i class="fas fa-address-card"></i></span><span class="header-nav-menu-item__text">About</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">Search</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">My Developer Handbook</div><div class="header-banner-info__subtitle">Programming is the art of telling another human being what one wants the computer to do.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Secure SSH Configuration - SSH Key Authentication Only</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">Created</span><span class="post-meta-item__value">2026-08-24</span></span></div></header><div class="post-body"><p>This guide shows how to generate an SSH key and configure a Linux server so that SSH authentication is performed only with an SSH key, without allowing login using the user’s password.</p>
+<span id="more"></span>
+
+<blockquote>
+<p><strong>Important:</strong> Do not disable password authentication until you have verified that SSH key login works correctly.</p>
+</blockquote>
+
+        <h2 id="1-Generate-an-SSH-key"   >
+          <a href="#1-Generate-an-SSH-key" class="heading-link"><i class="fas fa-link"></i></a><a href="#1-Generate-an-SSH-key" class="headerlink" title="1. Generate an SSH key"></a>1. Generate an SSH key</h2>
+      <p>The recommended key type for modern SSH setups is <code>ed25519</code>.</p>
+
+        <h3 id="Windows-PowerShell"   >
+          <a href="#Windows-PowerShell" class="heading-link"><i class="fas fa-link"></i></a><a href="#Windows-PowerShell" class="headerlink" title="Windows PowerShell"></a>Windows PowerShell</h3>
+      <p>Generate a new SSH key:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh<span class="literal">-keygen</span> <span class="literal">-t</span> ed25519 <span class="literal">-C</span> <span class="string">&quot;your-name-or-server-name&quot;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>For example:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh<span class="literal">-keygen</span> <span class="literal">-t</span> ed25519 <span class="literal">-C</span> <span class="string">&quot;testapp-servename&quot;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>When asked where to save the key, you can press <code>Enter</code> to use the default location:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\&lt;username&gt;\.ssh\id_ed25519</span><br></pre></td></tr></table></div></figure>
+
+<p>This creates two files:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id_ed25519      -&gt; private key</span><br><span class="line">id_ed25519.pub  -&gt; public key</span><br></pre></td></tr></table></div></figure>
+
+<p>You can display the public key with:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-Content</span> <span class="variable">$env:USERPROFILE</span>\.ssh\id_ed25519.pub</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Generate-a-separate-key-for-a-specific-server"   >
+          <a href="#Generate-a-separate-key-for-a-specific-server" class="heading-link"><i class="fas fa-link"></i></a><a href="#Generate-a-separate-key-for-a-specific-server" class="headerlink" title="Generate a separate key for a specific server"></a>Generate a separate key for a specific server</h3>
+      <p>If you already have an SSH key and want a separate one for this VPS:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh<span class="literal">-keygen</span> <span class="literal">-t</span> ed25519 <span class="operator">-f</span> <span class="variable">$env:USERPROFILE</span>\.ssh\id_ed25519_testapp <span class="literal">-C</span> <span class="string">&quot;testapp-servename&quot;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Display its public key:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-Content</span> <span class="variable">$env:USERPROFILE</span>\.ssh\id_ed25519_testapp.pub</span><br></pre></td></tr></table></div></figure>
+
+<p>Connect using that specific private key:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh <span class="literal">-i</span> <span class="variable">$env:USERPROFILE</span>\.ssh\id_ed25519_testapp user@SERVER_IP</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Linux-or-macOS"   >
+          <a href="#Linux-or-macOS" class="heading-link"><i class="fas fa-link"></i></a><a href="#Linux-or-macOS" class="headerlink" title="Linux or macOS"></a>Linux or macOS</h3>
+      <p>Generate the key:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;testapp-servername&quot;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>Display the public key:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="Passphrase-recommendation"   >
+          <a href="#Passphrase-recommendation" class="heading-link"><i class="fas fa-link"></i></a><a href="#Passphrase-recommendation" class="headerlink" title="Passphrase recommendation"></a>Passphrase recommendation</h3>
+      <p>When <code>ssh-keygen</code> asks for a passphrase, it is recommended to set one, especially for keys that provide access to production servers.</p>
+<p>A passphrase protects the private key if the file is ever copied or stolen.</p>
+
+        <h2 id="2-Add-the-public-key-to-the-server"   >
+          <a href="#2-Add-the-public-key-to-the-server" class="heading-link"><i class="fas fa-link"></i></a><a href="#2-Add-the-public-key-to-the-server" class="headerlink" title="2. Add the public key to the server"></a>2. Add the public key to the server</h2>
+      <p>Connect to the server and create the <code>.ssh</code> directory if it does not already exist:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.ssh</span><br><span class="line"><span class="built_in">chmod</span> 700 ~/.ssh</span><br></pre></td></tr></table></div></figure>
+
+<p>Open the <code>authorized_keys</code> file:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano ~/.ssh/authorized_keys</span><br></pre></td></tr></table></div></figure>
+
+<p>Add your SSH public key to the file, for example:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-ed25519 AAAAC3... your-public-key</span><br></pre></td></tr></table></div></figure>
+
+<p>Save the file and set the correct permissions:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="3-Test-SSH-key-authentication"   >
+          <a href="#3-Test-SSH-key-authentication" class="heading-link"><i class="fas fa-link"></i></a><a href="#3-Test-SSH-key-authentication" class="headerlink" title="3. Test SSH key authentication"></a>3. Test SSH key authentication</h2>
+      <p>Do not close your current SSH session.</p>
+<p>Open a new terminal on your computer and try to connect:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh user@SERVER_IP</span><br></pre></td></tr></table></div></figure>
+
+<p>If you use an SSH key with a custom filename:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh <span class="literal">-i</span> <span class="variable">$env:USERPROFILE</span>\.ssh\id_ed25519_testapp user@SERVER_IP</span><br></pre></td></tr></table></div></figure>
+
+<p>If you can connect without entering the Linux user’s password, SSH key authentication is working correctly.</p>
+<p>If your SSH key has a passphrase, SSH may ask for the <strong>key passphrase</strong>. This is different from the Linux user’s password.</p>
+
+        <h2 id="4-Disable-SSH-password-authentication"   >
+          <a href="#4-Disable-SSH-password-authentication" class="heading-link"><i class="fas fa-link"></i></a><a href="#4-Disable-SSH-password-authentication" class="headerlink" title="4. Disable SSH password authentication"></a>4. Disable SSH password authentication</h2>
+      <p>Edit the SSH server configuration:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/ssh/sshd_config</span><br></pre></td></tr></table></div></figure>
+
+<p>Make sure the following settings are present:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PubkeyAuthentication yes</span><br><span class="line">PasswordAuthentication no</span><br><span class="line">PermitRootLogin no</span><br><span class="line">KbdInteractiveAuthentication no</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="What-these-options-do"   >
+          <a href="#What-these-options-do" class="heading-link"><i class="fas fa-link"></i></a><a href="#What-these-options-do" class="headerlink" title="What these options do"></a>What these options do</h3>
+      <ul>
+<li><code>PubkeyAuthentication yes</code> — enables SSH key authentication.</li>
+<li><code>PasswordAuthentication no</code> — disables SSH login using the user’s password.</li>
+<li><code>PermitRootLogin no</code> — disables direct SSH login as <code>root</code>.</li>
+<li><code>KbdInteractiveAuthentication no</code> — disables interactive password-based authentication methods.</li>
+</ul>
+
+        <h2 id="5-Validate-the-SSH-configuration"   >
+          <a href="#5-Validate-the-SSH-configuration" class="heading-link"><i class="fas fa-link"></i></a><a href="#5-Validate-the-SSH-configuration" class="headerlink" title="5. Validate the SSH configuration"></a>5. Validate the SSH configuration</h2>
+      <p>Before restarting the SSH service, validate the configuration:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sshd -t</span><br></pre></td></tr></table></div></figure>
+
+<p>If this command does not display any errors, the configuration is valid.</p>
+
+        <h2 id="6-Restart-the-SSH-service"   >
+          <a href="#6-Restart-the-SSH-service" class="heading-link"><i class="fas fa-link"></i></a><a href="#6-Restart-the-SSH-service" class="headerlink" title="6. Restart the SSH service"></a>6. Restart the SSH service</h2>
+      <p>On Ubuntu:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart ssh</span><br></pre></td></tr></table></div></figure>
+
+<p>You can also check the service status:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status ssh</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="7-Test-the-connection-again"   >
+          <a href="#7-Test-the-connection-again" class="heading-link"><i class="fas fa-link"></i></a><a href="#7-Test-the-connection-again" class="headerlink" title="7. Test the connection again"></a>7. Test the connection again</h2>
+      <p>Open another new terminal and connect again:</p>
+<figure class="highlight powershell"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh user@SERVER_IP</span><br></pre></td></tr></table></div></figure>
+
+<p>The connection should work using the SSH key.</p>
+<p>If someone tries to connect using only the user’s password, authentication should be rejected.</p>
+
+        <h2 id="8-The-user’s-password-can-remain-enabled-for-sudo"   >
+          <a href="#8-The-user’s-password-can-remain-enabled-for-sudo" class="heading-link"><i class="fas fa-link"></i></a><a href="#8-The-user’s-password-can-remain-enabled-for-sudo" class="headerlink" title="8. The user’s password can remain enabled for sudo"></a>8. The user’s password can remain enabled for sudo</h2>
+      <p>You do not need to remove the Linux user’s password.</p>
+<p>A good configuration is:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SSH login -&gt; SSH key only</span><br><span class="line">sudo      -&gt; user password may still be required</span><br></pre></td></tr></table></div></figure>
+
+<p>This means the user’s password cannot be used for SSH login, but it can still be used for administrative operations with <code>sudo</code>.</p>
+
+        <h2 id="Optional-SSH-config-for-easier-connections"   >
+          <a href="#Optional-SSH-config-for-easier-connections" class="heading-link"><i class="fas fa-link"></i></a><a href="#Optional-SSH-config-for-easier-connections" class="headerlink" title="Optional: SSH config for easier connections"></a>Optional: SSH config for easier connections</h2>
+      <p>If you use a custom SSH key, you can add an entry to your SSH config file.</p>
+<p>On Windows:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\&lt;username&gt;\.ssh\config</span><br></pre></td></tr></table></div></figure>
+
+<p>On Linux&#x2F;macOS:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.ssh/config</span><br></pre></td></tr></table></div></figure>
+
+<p>Example:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host testapp</span><br><span class="line">    HostName SERVER_IP</span><br><span class="line">    User user</span><br><span class="line">    IdentityFile ~/.ssh/id_ed25519_testapp</span><br></pre></td></tr></table></div></figure>
+
+<p>Then you can connect simply with:</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh testapp</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="Additional-recommendations"   >
+          <a href="#Additional-recommendations" class="heading-link"><i class="fas fa-link"></i></a><a href="#Additional-recommendations" class="headerlink" title="Additional recommendations"></a>Additional recommendations</h2>
+      <p>For a public VPS, it is also worth configuring:</p>
+<ul>
+<li>a firewall such as <code>ufw</code>;</li>
+<li>SSH access only for specific users;</li>
+<li>regular security updates;</li>
+<li>Fail2ban, if you want additional protection;</li>
+<li>backups for important data and configuration.</li>
+</ul>
+
+        <h2 id="Important-security-note"   >
+          <a href="#Important-security-note" class="heading-link"><i class="fas fa-link"></i></a><a href="#Important-security-note" class="headerlink" title="Important security note"></a>Important security note</h2>
+      <p>Keep your SSH private key only on your own device.</p>
+<p>Never copy or upload the private key to the server or to external services.</p>
+<p>The public key can safely be stored in:</p>
+<figure class="highlight text"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.ssh/authorized_keys</span><br></pre></td></tr></table></div></figure>
+
+<p>The private key should remain only on the computer you use to connect to the server.</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ END ------</div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/ssh/">ssh</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/authentication/">authentication</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/server/">server</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://alexsipco.net/tags/security/">security</a></span></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2026/07/14/basic-linux-administration-guide/"><span class="paginator-prev__text">Basic Linux Administration Guide</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">Catalog</span><span class="sidebar-nav-ov">Overview</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Generate-an-SSH-key"><span class="toc-number">1.</span> <span class="toc-text">
+          1. Generate an SSH key</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-PowerShell"><span class="toc-number">1.1.</span> <span class="toc-text">
+          Windows PowerShell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-a-separate-key-for-a-specific-server"><span class="toc-number">1.2.</span> <span class="toc-text">
+          Generate a separate key for a specific server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-or-macOS"><span class="toc-number">1.3.</span> <span class="toc-text">
+          Linux or macOS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Passphrase-recommendation"><span class="toc-number">1.4.</span> <span class="toc-text">
+          Passphrase recommendation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Add-the-public-key-to-the-server"><span class="toc-number">2.</span> <span class="toc-text">
+          2. Add the public key to the server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Test-SSH-key-authentication"><span class="toc-number">3.</span> <span class="toc-text">
+          3. Test SSH key authentication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Disable-SSH-password-authentication"><span class="toc-number">4.</span> <span class="toc-text">
+          4. Disable SSH password authentication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-these-options-do"><span class="toc-number">4.1.</span> <span class="toc-text">
+          What these options do</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Validate-the-SSH-configuration"><span class="toc-number">5.</span> <span class="toc-text">
+          5. Validate the SSH configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Restart-the-SSH-service"><span class="toc-number">6.</span> <span class="toc-text">
+          6. Restart the SSH service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Test-the-connection-again"><span class="toc-number">7.</span> <span class="toc-text">
+          7. Test the connection again</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-The-user%E2%80%99s-password-can-remain-enabled-for-sudo"><span class="toc-number">8.</span> <span class="toc-text">
+          8. The user’s password can remain enabled for sudo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Optional-SSH-config-for-easier-connections"><span class="toc-number">9.</span> <span class="toc-text">
+          Optional: SSH config for easier connections</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Additional-recommendations"><span class="toc-number">10.</span> <span class="toc-text">
+          Additional recommendations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Important-security-note"><span class="toc-number">11.</span> <span class="toc-text">
+          Important security note</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="/uploads/me.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Alexandr Sipco</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://www.facebook.com/alexsqnet" target="_blank" rel="noopener" data-popover="social.facebook" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-facebook"></i></span></a><a class="sidebar-ov-social-item" href="https://www.linkedin.com/in/alexandr-sipco-48265b163" target="_blank" rel="noopener" data-popover="social.linkedin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-linkedin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives"><div class="sidebar-ov-state-item__count">12</div><div class="sidebar-ov-state-item__name">Archives</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories"><div class="sidebar-ov-state-item__count">9</div><div class="sidebar-ov-state-item__name">Categories</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags"><div class="sidebar-ov-state-item__count">31</div><div class="sidebar-ov-state-item__name">Tags</div></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">You have read </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2026</span><span class="footer__icon"><i class="fas fa-code"></i></span><span>Alexandr Sipco</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="Search for Posts (Support multiple keywords)"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ Untitled ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', 'Please enter characters');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="/js/utils.js?v=2.8.0"></script><script src="/js/stun-boot.js?v=2.8.0"></script><script src="/js/scroll.js?v=2.8.0"></script><script src="/js/header.js?v=2.8.0"></script><script src="/js/sidebar.js?v=2.8.0"></script><script type="application/json" src="/search.xml"></script></body></html>

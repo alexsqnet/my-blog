@@ -4,12 +4,7 @@ date: 2024-02-16 20:02:10
 tags: ["asp.net core", "iis", "kestrel", "web servers"]
 category: ["web servers"]
 
-thumbnail: uploads/iis-vs-kestrel-diff/cover.png
-banner: uploads/iis-vs-kestrel-diff/cover.png
 ---
-![Alt Text](uploads/iis-vs-kestrel-diff/cover.png)
-
-# IIS vs Kestrel: What is the Difference?
 
 When you create an ASP.NET Core web app, it runs on a web server. You might have heard about **Kestrel** and **IIS** — but what’s the difference between them? Let’s keep it simple.
 
