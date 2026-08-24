@@ -80,9 +80,9 @@
             
             <tag> linux </tag>
             
-            <tag> docker </tag>
-            
             <tag> cli </tag>
+            
+            <tag> docker </tag>
             
         </tags>
       
@@ -171,9 +171,9 @@
       
         <tags>
             
-            <tag> cli </tag>
-            
             <tag> git </tag>
+            
+            <tag> cli </tag>
             
         </tags>
       

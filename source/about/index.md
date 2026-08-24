@@ -68,7 +68,7 @@ In 2017, I joined **RodacInfo (Draytus / Datto)** as a **.NET Developer**, where
 - Console applications
 - Windows Forms applications
 - JavaScript
-- MySQL
+- MySQL / MS SQL Server
 
 It was challenging, but I gained a tremendous amount of experience.
 
