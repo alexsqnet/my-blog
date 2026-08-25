@@ -150,7 +150,7 @@ header:
     # Effective for all pages.
     enable: true
     # You can override it by `header_title` in Front-Matter of .md
-    title: My Developer Handbook
+    title: Developer Handbook
     # You can override it by `header_subtitle` in Front-Matter of .md
     subtitle: Programming is the art of telling another human being what one wants the computer to do.
   # Mask effect of the background image.
