@@ -30,6 +30,15 @@ mixin postHeader(post)
               valueText: full_date(post.date, 'YYYY-MM-DD')
             })
 
+        if !is_post() && post.categories && post.categories.length > 0
+          span.post-meta-item.post-meta-item--categories
+            span.post-meta-item__icon
+              i.fas.fa-folder-open
+            each category, index in post.categories.data
+              if index > 0
+                span.post-meta-category__separator ,
+              a.post-meta-category__link(href=category.permalink)= category.name
+
         if theme.post_meta.updated.enable
           span.post-meta-item.post-meta-item--updatetime
             - var iconClass = theme.post_meta.updated.icon;

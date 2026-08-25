@@ -2,34 +2,110 @@
 
 .postlist {
   &-item {
-    margin: 0 0 1.5rem;
-    width: 100%;
     layout-card();
+    margin: 0 0 1.5rem;
+    border: 1px solid var(--color-gray-250);
+    border-left: 4px solid $blue-light;
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    width: 100%;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+
+    &:hover {
+      border-color: alpha($blue-light, .55);
+      box-shadow: 0 10px 24px alpha(#000, .12);
+      transform: translateY(-3px);
+    }
+
+    .post-header {
+      margin-bottom: .85rem;
+      text-align: left;
+    }
+
+    .post-title {
+      font-size: 1.75em;
+      line-height: 1.25;
+    }
+
+    .post-meta {
+      display: flex;
+      margin-top: .35rem;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: .875em;
+      line-height: 1.6;
+    }
+
+    .post-meta-category {
+      &__separator {
+        margin-right: .3rem;
+      }
+
+      &__link {
+        color: var(--color-gray-700);
+
+        &:hover {
+          color: $blue-light;
+        }
+      }
+    }
+
+    .post-body {
+      line-height: 1.65;
+    }
+
+    .post-excerpt {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+
+      > :first-child {
+        margin-top: 0;
+      }
+
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
 .post {
   &-readmore {
-    margin-top: 1.5rem;
-    text-align: center;
+    margin-top: 1rem;
+    text-align: left;
 
     &__link {
       display: inline-block;
-      border-radius: 5px;
-      padding: 0 .6em;
-      color: var(--color-gray-200);
-      background-color: $home-readmore-bg-color;
-      transition: background-color .2s ease;
+      padding: 0;
+      color: $blue-light;
+      background-color: transparent;
+      font-weight: $font-weight-bold;
+      transition: color .2s ease, transform .2s ease;
       cursor: pointer;
 
       &:hover {
-        color: var(--color-gray-200);
-        background-color: $home-readmore-bg-hover-color;
+        color: $home-readmore-bg-hover-color;
+        background-color: transparent;
+        transform: translateX(3px);
       }
     }
 
     &__icon {
-      margin-left: .3rem;
+      margin-right: .35rem;
+    }
+  }
+}
+
+@media (max-width: $xs-width) {
+  .postlist {
+    &-item {
+      border-left-width: 3px;
+
+      .post-title {
+        font-size: 1.4em;
+      }
     }
   }
 }

@@ -887,7 +887,7 @@ icon:
   feed_rss: fas fa-rss
   paginator_prev: fas fa-angle-left
   paginator_next: fas fa-angle-right
-  read_more_btn: fas fa-solid fa-book #fas fa-long-arrow-alt-right
+  read_more_btn: fas fa-long-arrow-alt-right
   post_tags: fas fa-tag
   copy_btn: fas fa-copy
   prompt_success: fas fa-check-circle

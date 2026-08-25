@@ -7,8 +7,7 @@ category: [".net"]
 ---
 
 Configuration is a core part of every ASP.NET Core application.  
-Before comparing `IOptions`, `IOptionsSnapshot`, and `IOptionsMonitor`,  
-let’s first understand **how configuration classes are created and registered**.
+Before comparing `IOptions`, `IOptionsSnapshot`, and `IOptionsMonitor`, let’s first understand **how configuration classes are created and registered**.
 
 > `IOptions` vs `IOptionsSnapshot` vs `IOptionsMonitor` in ASP.NET Core
 
